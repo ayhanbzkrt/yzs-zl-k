@@ -1,0 +1,3746 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Gökbörü'nün Yapay Zekâ Sözlüğü · AI'HAN ACADEMY</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Cinzel:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  /* Editorial palette: ink black, parchment, indigo deep, electric cyan, gold rune */
+  --ink:#08070d;
+  --ink-2:#0f0d1a;
+  --ink-3:#171528;
+  --indigo:#1c1e4a;
+  --plum:#2a1740;
+  --rune:#7eddff;
+  --rune-deep:#3aa3d4;
+  --gold:#e5b15a;
+  --gold-bright:#f5d089;
+  --copper:#c98e1a;
+  --parchment:#f1e6c8;
+  --parchment-2:#d9c89b;
+  --ember:#ff7a59;
+  --crimson:#d44a4a;
+  --jade:#5fd6a0;
+  --lavender:#c2a3ff;
+
+  --display:"Cinzel", "Cormorant Garamond", serif;
+  --serif:"Cormorant Garamond", Georgia, serif;
+  --sans:"Plus Jakarta Sans", system-ui, sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, monospace;
+
+  --shadow-deep:0 30px 80px -20px rgba(0,0,0,.65), 0 12px 30px -12px rgba(0,0,0,.45);
+  --shadow-glow:0 0 80px -20px rgba(126,221,255,.35);
+  --shadow-rune:0 0 60px -10px rgba(229,177,90,.45);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+html,body{overflow-x:hidden}
+::selection{background:var(--gold);color:var(--ink)}
+
+body{
+  font-family:var(--sans);
+  font-weight:400;
+  background:var(--ink);
+  color:var(--parchment);
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  letter-spacing:.005em;
+}
+
+/* ============= ATMOSPHERIC BACKGROUND LAYERS ============= */
+.atmos{
+  position:fixed;
+  inset:0;
+  z-index:-10;
+  pointer-events:none;
+  background:
+    radial-gradient(ellipse 60% 50% at 80% 10%, rgba(126,221,255,.10), transparent 60%),
+    radial-gradient(ellipse 50% 40% at 10% 70%, rgba(229,177,90,.08), transparent 60%),
+    radial-gradient(ellipse 70% 60% at 50% 110%, rgba(42,23,64,.55), transparent 70%),
+    linear-gradient(180deg, #08070d 0%, #0c0a18 30%, #100d22 60%, #0a0815 100%);
+}
+
+.atmos-grain{
+  position:fixed; inset:0; z-index:-9; pointer-events:none;
+  opacity:.18; mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
+}
+
+.constellation{
+  position:fixed; inset:0; z-index:-8; pointer-events:none;
+  background-image:
+    radial-gradient(1.5px 1.5px at 8% 12%, #fff,transparent 70%),
+    radial-gradient(1px 1px at 22% 38%, #cfe9ff,transparent 70%),
+    radial-gradient(2px 2px at 64% 18%, #fff8d6,transparent 70%),
+    radial-gradient(1px 1px at 81% 32%, #b8d8ff,transparent 70%),
+    radial-gradient(1.5px 1.5px at 44% 64%, #fff,transparent 70%),
+    radial-gradient(2.5px 2.5px at 88% 74%, #ffe9b3,transparent 70%),
+    radial-gradient(1px 1px at 6% 82%, #fff,transparent 70%),
+    radial-gradient(1px 1px at 36% 8%, #fff,transparent 70%),
+    radial-gradient(1px 1px at 72% 88%, #cfe9ff,transparent 70%),
+    radial-gradient(1.5px 1.5px at 92% 52%, #fff,transparent 70%);
+  animation:starpulse 7s ease-in-out infinite alternate;
+}
+@keyframes starpulse{from{opacity:.55}to{opacity:1}}
+
+.aurora{
+  position:fixed; inset:0; z-index:-7; pointer-events:none;
+  filter:blur(60px); opacity:.35;
+}
+.aurora::before, .aurora::after{
+  content:""; position:absolute; border-radius:50%;
+}
+.aurora::before{
+  width:55vw; height:55vw; left:-10vw; top:-10vw;
+  background:radial-gradient(circle, rgba(126,221,255,.4), transparent 60%);
+  animation:auroraDrift 24s ease-in-out infinite;
+}
+.aurora::after{
+  width:65vw; height:65vw; right:-15vw; top:30vh;
+  background:radial-gradient(circle, rgba(194,163,255,.3), transparent 60%);
+  animation:auroraDrift 32s ease-in-out infinite reverse;
+}
+@keyframes auroraDrift{
+  0%,100%{transform:translate(0,0) scale(1)}
+  50%{transform:translate(8%,4%) scale(1.15)}
+}
+
+.ember-field{position:fixed; inset:0; z-index:-6; pointer-events:none}
+.ember{
+  position:absolute; width:3px; height:3px; border-radius:50%;
+  background:radial-gradient(circle, #fff5d6, #e5b15a 50%, transparent 70%);
+  box-shadow:0 0 12px rgba(229,177,90,.7), 0 0 24px rgba(229,177,90,.35);
+  animation:emberRise linear infinite;
+  opacity:0;
+}
+@keyframes emberRise{
+  0%{transform:translateY(0) translateX(0); opacity:0}
+  10%{opacity:.9}
+  90%{opacity:.7}
+  100%{transform:translateY(-100vh) translateX(40px); opacity:0}
+}
+
+/* ============= TYPOGRAPHIC PRIMITIVES ============= */
+.eyebrow{
+  display:inline-flex; align-items:center; gap:10px;
+  font-family:var(--mono);
+  font-size:11px; letter-spacing:.32em; text-transform:uppercase;
+  color:var(--gold); font-weight:500;
+}
+.eyebrow::before, .eyebrow::after{
+  content:""; width:24px; height:1px;
+  background:linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+.eyebrow.solo::after{display:none}
+.eyebrow.solo::before{width:12px}
+
+.display{
+  font-family:var(--display);
+  font-weight:600;
+  letter-spacing:-.01em;
+  line-height:.96;
+}
+.serif{font-family:var(--serif); font-weight:500}
+.italic{font-style:italic}
+
+.rune-divider{
+  display:flex; align-items:center; gap:14px; justify-content:center;
+  margin:32px 0;
+  color:var(--gold); opacity:.7;
+}
+.rune-divider::before, .rune-divider::after{
+  content:""; flex:1; max-width:160px; height:1px;
+  background:linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+.rune-divider span{
+  font-family:var(--mono); font-size:13px; letter-spacing:.4em;
+}
+
+/* ============= NAVIGATION ============= */
+.topnav{
+  position:sticky; top:0; z-index:50;
+  background:linear-gradient(180deg, rgba(8,7,13,.85), rgba(8,7,13,.65));
+  backdrop-filter:blur(24px) saturate(140%);
+  -webkit-backdrop-filter:blur(24px) saturate(140%);
+  border-bottom:1px solid rgba(229,177,90,.12);
+}
+.topnav-inner{
+  width:min(1480px, 95vw); margin:auto;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:14px 0; gap:16px;
+}
+.brand{
+  display:flex; align-items:center; gap:14px;
+}
+.brand-mark{
+  width:46px; height:46px; border-radius:50%;
+  display:grid; place-items:center;
+  position:relative;
+  background:radial-gradient(circle at 35% 30%, #fff 0 6%, transparent 7%),
+             radial-gradient(circle at 50% 55%, var(--rune) 0 22%, var(--indigo) 23% 48%, var(--ink) 49%);
+  border:1.5px solid rgba(229,177,90,.5);
+  box-shadow:inset 0 0 12px rgba(126,221,255,.3), 0 0 18px rgba(229,177,90,.25);
+}
+.brand-mark::after{
+  content:""; position:absolute; inset:-4px;
+  border-radius:50%; border:1px dashed rgba(229,177,90,.3);
+  animation:spin 30s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.brand-text{display:flex; flex-direction:column; line-height:1.1}
+.brand-text .b1{
+  font-family:var(--display); font-weight:600;
+  font-size:15px; letter-spacing:.06em; color:var(--gold-bright);
+}
+.brand-text .b2{
+  font-family:var(--mono); font-size:10px; letter-spacing:.32em;
+  color:var(--rune); text-transform:uppercase; margin-top:2px;
+}
+
+.nav-actions{display:flex; gap:8px; flex-wrap:wrap; align-items:center}
+
+.btn{
+  position:relative;
+  appearance:none; border:0; cursor:pointer;
+  padding:11px 18px;
+  font-family:var(--sans); font-weight:600; font-size:13px;
+  letter-spacing:.04em;
+  border-radius:2px;
+  color:var(--parchment);
+  background:transparent;
+  border:1px solid rgba(229,177,90,.35);
+  transition:all .25s cubic-bezier(.4,0,.2,1);
+  overflow:hidden;
+  text-transform:uppercase;
+}
+.btn::before{
+  content:""; position:absolute; inset:0;
+  background:linear-gradient(135deg, var(--gold), var(--copper));
+  transform:translateY(101%);
+  transition:transform .35s cubic-bezier(.4,0,.2,1);
+  z-index:-1;
+}
+.btn:hover{color:var(--ink); border-color:var(--gold)}
+.btn:hover::before{transform:translateY(0)}
+
+.btn.primary{
+  background:linear-gradient(135deg, var(--gold), var(--copper));
+  border-color:transparent; color:var(--ink);
+}
+.btn.primary::before{
+  background:linear-gradient(135deg, var(--gold-bright), var(--gold));
+}
+
+.btn.ghost-rune{border-color:rgba(126,221,255,.4); color:var(--rune)}
+.btn.ghost-rune::before{background:linear-gradient(135deg, var(--rune), var(--rune-deep))}
+.btn.ghost-rune:hover{color:var(--ink)}
+
+.btn.small{padding:8px 13px; font-size:11px}
+
+/* ============= HERO — EDITORIAL CINEMATIC ============= */
+.hero{
+  position:relative;
+  padding:60px 24px 80px;
+  min-height:92vh;
+  display:flex; align-items:center;
+  overflow:hidden;
+}
+.hero-grid{
+  width:min(1480px, 95vw); margin:auto;
+  display:grid;
+  grid-template-columns:1.15fr .85fr;
+  gap:48px;
+  align-items:center;
+}
+
+.hero-left{position:relative; z-index:2}
+.hero-eyebrow{margin-bottom:28px}
+
+.hero-title{
+  font-family:var(--display);
+  font-weight:600;
+  font-size:clamp(48px, 7.5vw, 108px);
+  line-height:.92;
+  letter-spacing:-.015em;
+  color:var(--parchment);
+  margin-bottom:18px;
+}
+.hero-title .line-1{display:block}
+.hero-title .line-2{
+  display:block;
+  font-style:italic;
+  font-family:var(--serif);
+  font-weight:500;
+  background:linear-gradient(180deg, var(--gold-bright) 0%, var(--gold) 50%, var(--copper) 100%);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+.hero-title .line-3{
+  display:block;
+  font-family:var(--display);
+  background:linear-gradient(180deg, #fff 0%, var(--rune) 70%, var(--rune-deep) 100%);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+
+.hero-lede{
+  font-family:var(--serif);
+  font-size:clamp(18px, 1.5vw, 22px);
+  font-weight:400;
+  line-height:1.55;
+  color:#dccfae;
+  max-width:580px;
+  margin:24px 0 36px;
+  font-style:italic;
+}
+.hero-lede strong{
+  font-style:normal; color:var(--gold-bright);
+  font-family:var(--sans); font-weight:600;
+}
+
+.hero-cta{display:flex; gap:12px; flex-wrap:wrap; margin-bottom:48px}
+
+.hero-stats{
+  display:grid; grid-template-columns:repeat(4, 1fr);
+  gap:0;
+  border-top:1px solid rgba(229,177,90,.18);
+  border-bottom:1px solid rgba(229,177,90,.18);
+  padding:18px 0;
+}
+.stat{
+  position:relative; padding:0 18px;
+}
+.stat:not(:last-child){border-right:1px solid rgba(229,177,90,.12)}
+.stat .num{
+  font-family:var(--display); font-weight:700;
+  font-size:clamp(28px, 3vw, 38px);
+  color:var(--gold-bright); line-height:1;
+}
+.stat .lbl{
+  font-family:var(--mono); font-size:10px; letter-spacing:.2em;
+  text-transform:uppercase; color:#9a8e6e; margin-top:8px; display:block;
+}
+
+/* ============= HERO RIGHT — WOLF PORTAL ============= */
+.hero-right{position:relative; aspect-ratio:1; max-width:560px; margin-left:auto}
+
+.portal-stage{
+  position:relative; width:100%; height:100%;
+  display:grid; place-items:center;
+}
+.portal-ring{
+  position:absolute; border-radius:50%;
+  border:1px solid rgba(126,221,255,.2);
+  box-shadow:inset 0 0 40px rgba(126,221,255,.1);
+}
+.pr-1{inset:0; border-color:rgba(229,177,90,.18); animation:spin 90s linear infinite}
+.pr-2{inset:8%; border:1px dashed rgba(126,221,255,.25); animation:spin 60s linear infinite reverse}
+.pr-3{inset:18%; border-color:rgba(229,177,90,.3); animation:spin 40s linear infinite}
+.pr-4{inset:30%;
+  background:radial-gradient(circle, rgba(126,221,255,.15), transparent 70%);
+}
+
+/* runic glyphs around portal */
+.glyph-orbit{
+  position:absolute; inset:0;
+  animation:spin 80s linear infinite;
+}
+.glyph{
+  position:absolute;
+  font-family:var(--display);
+  font-size:14px; color:var(--gold);
+  letter-spacing:.2em;
+  opacity:.7;
+  text-shadow:0 0 8px rgba(229,177,90,.6);
+}
+.glyph.g1{top:2%; left:50%; transform:translateX(-50%)}
+.glyph.g2{top:50%; right:2%; transform:translateY(-50%) rotate(90deg)}
+.glyph.g3{bottom:2%; left:50%; transform:translateX(-50%) rotate(180deg)}
+.glyph.g4{top:50%; left:2%; transform:translateY(-50%) rotate(-90deg)}
+.glyph.g5{top:14%; right:14%; transform:rotate(45deg); font-size:11px}
+.glyph.g6{bottom:14%; left:14%; transform:rotate(-135deg); font-size:11px}
+
+.wolf-core{
+  position:relative;
+  width:54%; aspect-ratio:1;
+  border-radius:50%;
+  display:grid; place-items:center;
+  background:
+    radial-gradient(circle at 50% 35%, rgba(255,255,255,.18) 0 18%, transparent 35%),
+    radial-gradient(circle at 50% 60%, rgba(126,221,255,.55), rgba(28,30,74,.9) 60%, var(--ink) 100%);
+  border:2px solid rgba(229,177,90,.4);
+  box-shadow:
+    inset 0 0 60px rgba(126,221,255,.4),
+    0 0 80px rgba(126,221,255,.3),
+    0 0 120px rgba(229,177,90,.2);
+  animation:floatWolf 4s ease-in-out infinite;
+}
+@keyframes floatWolf{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-14px)}
+}
+.wolf-core::before{
+  content:"🐺";
+  font-size:clamp(80px, 12vw, 140px);
+  filter:drop-shadow(0 8px 22px rgba(0,0,0,.6)) drop-shadow(0 0 40px rgba(126,221,255,.5));
+  animation:wolfBreath 3s ease-in-out infinite;
+}
+@keyframes wolfBreath{
+  0%,100%{transform:scale(1) rotate(-2deg)}
+  50%{transform:scale(1.04) rotate(2deg)}
+}
+
+.wolf-tag{
+  position:absolute; bottom:-4%; left:50%; transform:translateX(-50%);
+  padding:9px 22px;
+  background:linear-gradient(180deg, var(--ink-2), var(--ink));
+  border:1px solid rgba(229,177,90,.5);
+  font-family:var(--display); font-size:13px; letter-spacing:.4em;
+  color:var(--gold-bright);
+  box-shadow:0 8px 30px rgba(0,0,0,.5);
+}
+.wolf-tag::before, .wolf-tag::after{
+  content:"◆"; color:var(--gold); margin:0 8px; font-size:8px;
+}
+
+/* speech bubble */
+.wolf-speech{
+  position:absolute;
+  bottom:-8%; right:-10%;
+  z-index:5;
+  max-width:280px;
+  background:linear-gradient(180deg, var(--parchment), var(--parchment-2));
+  color:var(--ink);
+  padding:16px 18px;
+  font-family:var(--serif);
+  font-size:15px; line-height:1.45; font-weight:500;
+  border:1px solid var(--copper);
+  box-shadow:0 18px 48px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.4);
+  border-radius:2px;
+  transform:rotate(2deg);
+}
+.wolf-speech::before{
+  content:""; position:absolute;
+  top:-6px; left:30px;
+  width:12px; height:12px;
+  background:linear-gradient(135deg, var(--parchment), var(--parchment-2));
+  border-top:1px solid var(--copper); border-left:1px solid var(--copper);
+  transform:rotate(45deg);
+}
+.wolf-speech .who{
+  font-family:var(--mono); font-size:9px; letter-spacing:.3em;
+  text-transform:uppercase; color:var(--copper); display:block;
+  margin-bottom:6px; font-weight:500;
+}
+
+/* ============= SECTION FRAMES ============= */
+.section{
+  position:relative;
+  padding:80px 24px;
+}
+.wrap{
+  width:min(1480px, 95vw); margin:auto;
+}
+
+.section-eyebrow{margin-bottom:18px}
+
+.section-heading{
+  font-family:var(--display); font-weight:600;
+  font-size:clamp(34px, 4.5vw, 64px);
+  line-height:1; letter-spacing:-.015em;
+  color:var(--parchment);
+  margin-bottom:14px;
+}
+.section-heading .accent{
+  font-style:italic;
+  font-family:var(--serif);
+  font-weight:500;
+  background:linear-gradient(180deg, var(--gold-bright), var(--copper));
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+
+.section-sub{
+  font-family:var(--serif); font-style:italic;
+  font-size:clamp(16px, 1.2vw, 19px);
+  color:#b9ad8c; max-width:620px; line-height:1.55;
+}
+
+/* ============= DISCOVERY / SEARCH ============= */
+.discovery{
+  margin-top:48px;
+  position:relative;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.01)),
+    rgba(15,13,26,.55);
+  backdrop-filter:blur(20px);
+  border:1px solid rgba(229,177,90,.18);
+  border-radius:2px;
+  padding:24px;
+  display:grid;
+  grid-template-columns:1.6fr .7fr .7fr .7fr;
+  gap:18px;
+}
+.discovery::before{
+  content:""; position:absolute; top:-1px; left:0; right:0; height:1px;
+  background:linear-gradient(90deg, transparent, var(--gold) 30%, var(--rune) 70%, transparent);
+}
+
+.field{position:relative}
+.field label{
+  display:block;
+  font-family:var(--mono); font-size:10px; letter-spacing:.2em;
+  color:var(--gold); text-transform:uppercase; margin-bottom:8px; font-weight:500;
+}
+input, select, textarea{
+  width:100%;
+  font-family:var(--sans); font-weight:500; font-size:14px;
+  background:rgba(8,7,13,.7);
+  border:1px solid rgba(229,177,90,.2);
+  color:var(--parchment);
+  padding:14px 16px;
+  border-radius:2px;
+  outline:none;
+  transition:all .2s;
+}
+input::placeholder{color:#6b6045; font-style:italic; font-family:var(--serif)}
+input:focus, select:focus, textarea:focus{
+  border-color:var(--gold);
+  box-shadow:0 0 0 3px rgba(229,177,90,.12);
+  background:rgba(8,7,13,.9);
+}
+option{background:var(--ink-2); color:var(--parchment)}
+
+.field.search-enhanced input{padding-right:46px}
+.search-clear-btn{
+  position:absolute; right:8px; bottom:8px;
+  width:30px; height:30px;
+  border:0; cursor:pointer;
+  background:linear-gradient(135deg, var(--gold), var(--copper));
+  color:var(--ink); font-weight:700; font-size:16px;
+  display:none; place-items:center;
+  border-radius:50%;
+  box-shadow:0 4px 12px rgba(229,177,90,.4);
+}
+.search-clear-btn.show{display:grid}
+
+.search-hint{
+  grid-column:1/-1;
+  font-family:var(--mono); font-size:11px;
+  color:#7a6f54; letter-spacing:.04em;
+  border-top:1px dashed rgba(229,177,90,.15);
+  padding-top:12px; margin-top:4px;
+}
+.search-hint::before{content:"❯ "; color:var(--rune)}
+
+/* category chips */
+.chips{
+  display:flex; gap:8px; flex-wrap:wrap;
+  margin-top:24px;
+}
+.chip{
+  font-family:var(--sans); font-weight:500; font-size:12px;
+  letter-spacing:.04em;
+  padding:9px 14px;
+  background:transparent;
+  border:1px solid rgba(229,177,90,.22);
+  color:var(--parchment-2);
+  cursor:pointer;
+  border-radius:2px;
+  transition:all .25s;
+  display:inline-flex; align-items:center; gap:6px;
+}
+.chip:hover{
+  border-color:var(--gold);
+  color:var(--gold-bright);
+  background:rgba(229,177,90,.06);
+}
+.chip.active{
+  background:linear-gradient(135deg, var(--gold), var(--copper));
+  border-color:transparent;
+  color:var(--ink);
+  font-weight:600;
+}
+
+/* ============= MAIN LAYOUT ============= */
+.main{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 360px;
+  gap:32px;
+  margin-top:40px;
+  align-items:start;
+}
+
+.section-bar{
+  display:flex; align-items:flex-end; justify-content:space-between;
+  gap:16px; margin-bottom:24px;
+  padding-bottom:16px;
+  border-bottom:1px solid rgba(229,177,90,.15);
+}
+.section-bar h2{
+  font-family:var(--display); font-weight:600;
+  font-size:clamp(22px, 2.4vw, 32px);
+  color:var(--parchment); letter-spacing:-.01em;
+}
+.section-bar h2 em{
+  font-style:italic; font-family:var(--serif);
+  color:var(--gold-bright); font-weight:500;
+}
+.count-pill{
+  font-family:var(--mono); font-size:11px; letter-spacing:.15em;
+  color:var(--rune); padding:6px 12px;
+  border:1px solid rgba(126,221,255,.3);
+  background:rgba(126,221,255,.05);
+  text-transform:uppercase;
+}
+
+/* ============= TERM CARDS — EDITORIAL ============= */
+.cards{
+  display:grid;
+  grid-template-columns:repeat(2, minmax(0,1fr));
+  gap:20px;
+}
+
+.term-card{
+  position:relative;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01)),
+    rgba(15,13,26,.4);
+  backdrop-filter:blur(12px);
+  border:1px solid rgba(229,177,90,.15);
+  padding:24px;
+  transition:all .35s cubic-bezier(.4,0,.2,1);
+  overflow:hidden;
+  border-radius:2px;
+  isolation:isolate;
+}
+.term-card::before{
+  content:""; position:absolute; inset:0;
+  background:radial-gradient(circle at var(--mx,50%) var(--my,50%),
+    rgba(229,177,90,.08), transparent 50%);
+  opacity:0; transition:opacity .35s;
+  pointer-events:none; z-index:-1;
+}
+.term-card::after{
+  content:""; position:absolute;
+  top:0; left:0; right:0; height:1px;
+  background:linear-gradient(90deg, transparent, rgba(229,177,90,.4), transparent);
+  opacity:0; transition:opacity .35s;
+}
+.term-card:hover{
+  border-color:rgba(229,177,90,.45);
+  transform:translateY(-4px);
+  box-shadow:0 24px 60px -20px rgba(0,0,0,.6), 0 0 40px -15px rgba(229,177,90,.2);
+}
+.term-card:hover::before{opacity:1}
+.term-card:hover::after{opacity:1}
+
+.term-card.search-hit{
+  border-color:rgba(229,177,90,.55);
+  box-shadow:0 0 0 1px rgba(229,177,90,.3), 0 12px 36px -12px rgba(229,177,90,.25);
+}
+
+.tc-num{
+  position:absolute; top:18px; right:20px;
+  font-family:var(--display); font-weight:700;
+  font-size:60px; color:rgba(229,177,90,.08);
+  line-height:1; letter-spacing:-.05em;
+  pointer-events:none;
+}
+
+.tc-header{display:flex; gap:14px; align-items:flex-start; margin-bottom:16px}
+.tc-icon{
+  flex-shrink:0;
+  width:48px; height:48px;
+  display:grid; place-items:center;
+  background:linear-gradient(135deg, var(--ink-3), var(--indigo));
+  border:1px solid rgba(229,177,90,.3);
+  font-size:24px;
+  border-radius:2px;
+  position:relative;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.06), 0 4px 14px rgba(0,0,0,.3);
+}
+.tc-icon::after{
+  content:""; position:absolute;
+  inset:-1px; border:1px solid transparent;
+  border-radius:inherit;
+  background:linear-gradient(135deg, var(--gold), transparent 60%) border-box;
+  -webkit-mask:linear-gradient(#000 0 0) padding-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor; mask-composite:exclude;
+  opacity:.4;
+}
+
+.tc-meta{flex:1; min-width:0}
+.tc-cat{
+  font-family:var(--mono); font-size:9px; letter-spacing:.25em;
+  text-transform:uppercase;
+  color:var(--rune); margin-bottom:4px;
+}
+.tc-title{
+  font-family:var(--display); font-weight:600;
+  font-size:21px; line-height:1.1;
+  color:var(--parchment); letter-spacing:-.01em;
+}
+.tc-level{
+  font-family:var(--mono); font-size:10px; letter-spacing:.18em;
+  padding:4px 10px; text-transform:uppercase;
+  border:1px solid; border-radius:2px;
+  flex-shrink:0;
+}
+.tc-level.l1{color:var(--jade); border-color:rgba(95,214,160,.35); background:rgba(95,214,160,.06)}
+.tc-level.l2{color:var(--gold); border-color:rgba(229,177,90,.35); background:rgba(229,177,90,.06)}
+.tc-level.l3{color:var(--lavender); border-color:rgba(194,163,255,.35); background:rgba(194,163,255,.06)}
+
+.tc-def{
+  font-family:var(--serif); font-weight:500;
+  font-size:16px; line-height:1.55;
+  color:#cfc4a4;
+  padding-bottom:14px;
+  border-bottom:1px dashed rgba(229,177,90,.18);
+}
+
+.tc-block{
+  display:grid; grid-template-columns:auto 1fr;
+  gap:10px 14px;
+  margin-top:12px;
+  font-family:var(--sans); font-size:13px;
+  line-height:1.5;
+}
+.tc-tag{
+  font-family:var(--mono); font-size:9px; letter-spacing:.2em;
+  text-transform:uppercase;
+  align-self:start; padding-top:2px;
+  white-space:nowrap;
+}
+.tc-block.ex .tc-tag{color:var(--jade)}
+.tc-block.act .tc-tag{color:var(--rune)}
+.tc-block.warn .tc-tag{color:var(--ember)}
+.tc-text{color:#b9ad8c}
+
+.tc-actions{
+  display:flex; gap:6px; flex-wrap:wrap;
+  margin-top:18px;
+  padding-top:16px;
+  border-top:1px solid rgba(229,177,90,.1);
+}
+.mini{
+  font-family:var(--mono); font-size:10px; letter-spacing:.1em;
+  text-transform:uppercase; font-weight:500;
+  padding:8px 12px;
+  background:transparent;
+  border:1px solid rgba(229,177,90,.25);
+  color:var(--parchment-2);
+  cursor:pointer;
+  transition:all .2s;
+  border-radius:2px;
+}
+.mini:hover{
+  border-color:var(--gold); color:var(--gold-bright);
+  background:rgba(229,177,90,.06);
+}
+.mini.done{
+  background:linear-gradient(135deg, var(--jade), #2c9b6f);
+  color:var(--ink); border-color:transparent; font-weight:600;
+}
+
+/* ============= SIDEBAR ============= */
+.side{
+  position:sticky; top:88px;
+  display:flex; flex-direction:column; gap:18px;
+}
+.sidebox{
+  position:relative;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01)),
+    rgba(15,13,26,.55);
+  backdrop-filter:blur(16px);
+  border:1px solid rgba(229,177,90,.15);
+  padding:22px;
+  border-radius:2px;
+  overflow:hidden;
+}
+.sidebox::before{
+  content:""; position:absolute;
+  top:0; left:0; right:0; height:1px;
+  background:linear-gradient(90deg, var(--gold), transparent);
+}
+.sidebox h3{
+  font-family:var(--display); font-weight:600;
+  font-size:18px; letter-spacing:.01em;
+  color:var(--gold-bright); margin-bottom:14px;
+  display:flex; align-items:center; gap:10px;
+}
+.sidebox h3 .icn{font-size:18px}
+
+.guide-block{display:grid; grid-template-columns:64px 1fr; gap:14px; align-items:center}
+.guide-avatar{
+  width:64px; height:64px; border-radius:50%;
+  display:grid; place-items:center;
+  font-size:30px;
+  background:radial-gradient(circle at 40% 30%, rgba(255,255,255,.2), transparent 50%),
+             radial-gradient(circle, var(--rune) 0 30%, var(--indigo) 70%);
+  border:1.5px solid var(--gold);
+  box-shadow:inset 0 0 18px rgba(126,221,255,.3), 0 0 22px rgba(229,177,90,.3);
+}
+.guide-text{
+  font-family:var(--serif); font-style:italic;
+  font-size:14px; color:#cfc4a4; line-height:1.5;
+}
+
+/* progress */
+.progress-track{
+  height:6px;
+  background:rgba(255,255,255,.06);
+  position:relative;
+  overflow:hidden;
+  border-radius:2px;
+}
+.progress-bar{
+  height:100%; width:0%;
+  background:linear-gradient(90deg, var(--jade), var(--rune), var(--gold));
+  transition:width .5s cubic-bezier(.4,0,.2,1);
+  box-shadow:0 0 12px rgba(126,221,255,.5);
+}
+.progress-text{
+  font-family:var(--mono); font-size:11px;
+  color:#9a8e6e; margin-top:10px; letter-spacing:.04em;
+}
+
+/* match game */
+.match-toolbar{
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:8px; margin-top:12px;
+}
+.match-score{
+  font-family:var(--mono); font-size:11px; letter-spacing:.1em;
+  color:var(--rune); margin-top:12px;
+  padding:8px 10px;
+  border-left:2px solid var(--rune);
+  background:rgba(126,221,255,.05);
+}
+.match-board{
+  display:grid; grid-template-columns:1fr; gap:10px;
+  margin-top:14px;
+}
+.match-col{display:grid; gap:6px}
+.match-col-title{
+  font-family:var(--mono); font-size:9px; letter-spacing:.25em;
+  text-transform:uppercase; color:var(--gold);
+  display:flex; justify-content:space-between;
+  padding-bottom:6px;
+  border-bottom:1px dashed rgba(229,177,90,.2);
+}
+.match-item{
+  font-family:var(--sans); font-weight:500; font-size:12.5px;
+  text-align:left;
+  padding:10px 12px; min-height:42px;
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(229,177,90,.18);
+  color:var(--parchment-2);
+  cursor:pointer;
+  transition:all .2s;
+  border-radius:2px;
+  line-height:1.35;
+}
+.match-item:hover{
+  border-color:var(--gold);
+  color:var(--gold-bright);
+  background:rgba(229,177,90,.05);
+}
+.match-item.selected{
+  border-color:var(--gold); background:rgba(229,177,90,.1);
+  box-shadow:0 0 0 2px rgba(229,177,90,.2);
+}
+.match-item.matched{
+  background:rgba(95,214,160,.1); border-color:var(--jade);
+  color:var(--jade); cursor:default; opacity:.85;
+}
+.match-item.wrong{
+  animation:matchShake .35s ease;
+  border-color:var(--crimson); background:rgba(212,74,74,.1);
+}
+@keyframes matchShake{
+  0%,100%{transform:translateX(0)}
+  25%{transform:translateX(-4px)}
+  75%{transform:translateX(4px)}
+}
+.feedback{
+  font-family:var(--mono); font-size:11px; letter-spacing:.04em;
+  margin-top:10px; min-height:18px;
+}
+
+/* ============= LAB SECTION ============= */
+.lab{
+  margin-top:70px;
+  display:grid; grid-template-columns:repeat(3, 1fr);
+  gap:20px;
+}
+.lab-card{
+  position:relative;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01)),
+    rgba(15,13,26,.5);
+  backdrop-filter:blur(14px);
+  border:1px solid rgba(229,177,90,.15);
+  padding:26px;
+  border-radius:2px;
+  overflow:hidden;
+}
+.lab-card::before{
+  content:""; position:absolute; top:0; left:0; right:0; height:2px;
+  background:linear-gradient(90deg, var(--gold), var(--rune), var(--lavender));
+}
+.lab-num{
+  font-family:var(--display); font-weight:700;
+  font-size:64px; line-height:1;
+  background:linear-gradient(180deg, var(--gold-bright), var(--copper));
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  opacity:.85;
+}
+.lab-card h3{
+  font-family:var(--display); font-weight:600;
+  font-size:22px; color:var(--parchment);
+  margin:6px 0 8px;
+}
+.lab-card p{
+  font-family:var(--serif); font-size:14px; line-height:1.55;
+  color:#b9ad8c; margin-bottom:14px;
+}
+textarea{
+  min-height:90px; resize:vertical;
+  font-family:var(--mono); font-size:13px;
+}
+.output{
+  margin-top:14px;
+  background:rgba(8,7,13,.6);
+  border:1px dashed rgba(229,177,90,.25);
+  padding:14px;
+  font-family:var(--mono); font-size:12px; line-height:1.6;
+  color:var(--parchment-2);
+  min-height:60px;
+  border-radius:2px;
+}
+.output b{color:var(--gold-bright); font-family:var(--sans); font-weight:600}
+
+/* ============= RESOURCES SECTION ============= */
+.resources{
+  margin-top:90px;
+  position:relative;
+  padding:60px 0;
+}
+.resources::before{
+  content:""; position:absolute;
+  top:0; left:50%; transform:translateX(-50%);
+  width:90%; max-width:1400px; height:1px;
+  background:linear-gradient(90deg, transparent, rgba(229,177,90,.3), transparent);
+}
+
+.res-intro{max-width:760px; margin-bottom:40px}
+
+.res-grid{
+  display:grid;
+  grid-template-columns:repeat(2, 1fr);
+  gap:18px;
+}
+
+.res-card{
+  position:relative;
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  gap:22px;
+  padding:26px 28px;
+  align-items:center;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.04), rgba(255,255,255,.01)),
+    rgba(15,13,26,.5);
+  backdrop-filter:blur(12px);
+  border:1px solid rgba(229,177,90,.15);
+  border-radius:2px;
+  text-decoration:none;
+  color:inherit;
+  transition:all .3s cubic-bezier(.4,0,.2,1);
+  overflow:hidden;
+}
+.res-card::before{
+  content:""; position:absolute;
+  left:0; top:0; bottom:0; width:3px;
+  background:linear-gradient(180deg, var(--gold), var(--copper));
+  transform:scaleY(0); transform-origin:top;
+  transition:transform .35s cubic-bezier(.4,0,.2,1);
+}
+.res-card:hover{
+  border-color:var(--gold);
+  transform:translateY(-3px);
+  box-shadow:0 20px 50px -20px rgba(229,177,90,.25);
+}
+.res-card:hover::before{transform:scaleY(1)}
+.res-card:hover .res-arrow{transform:translateX(4px); color:var(--gold-bright)}
+
+.res-emblem{
+  width:66px; height:66px;
+  display:grid; place-items:center;
+  font-family:var(--display); font-weight:700;
+  font-size:13px; letter-spacing:.04em;
+  text-align:center;
+  color:var(--gold-bright);
+  background:radial-gradient(circle, var(--ink-3), var(--ink));
+  border:1.5px solid rgba(229,177,90,.4);
+  border-radius:50%;
+  position:relative;
+  box-shadow:inset 0 0 14px rgba(229,177,90,.15), 0 4px 14px rgba(0,0,0,.4);
+  flex-shrink:0;
+}
+.res-emblem::before{
+  content:""; position:absolute; inset:-3px;
+  border:1px dashed rgba(229,177,90,.3);
+  border-radius:50%;
+}
+.res-emblem.unicef{color:#7eddff; border-color:rgba(126,221,255,.4)}
+.res-emblem.unesco{color:#c2a3ff; border-color:rgba(194,163,255,.4)}
+.res-emblem.oecd{color:#5fd6a0; border-color:rgba(95,214,160,.4)}
+.res-emblem.mit{color:#ff7a59; border-color:rgba(255,122,89,.4)}
+.res-emblem.commonsense{color:#f5d089; border-color:rgba(245,208,137,.4)}
+.res-emblem.meb{color:#fff; border-color:rgba(255,255,255,.35)}
+
+.res-body{min-width:0}
+.res-org{
+  font-family:var(--mono); font-size:10px; letter-spacing:.25em;
+  text-transform:uppercase; color:var(--rune);
+  margin-bottom:6px;
+}
+.res-title{
+  font-family:var(--display); font-weight:600;
+  font-size:18px; line-height:1.2;
+  color:var(--parchment);
+  margin-bottom:6px;
+}
+.res-desc{
+  font-family:var(--serif); font-size:14px; line-height:1.5;
+  color:#a89c7a;
+  font-style:italic;
+}
+.res-arrow{
+  font-family:var(--display); font-size:24px;
+  color:var(--gold);
+  transition:all .3s;
+  flex-shrink:0;
+}
+
+.res-foot{
+  margin-top:32px;
+  padding:20px 24px;
+  border-left:2px solid var(--gold);
+  background:rgba(229,177,90,.04);
+  font-family:var(--serif); font-style:italic;
+  font-size:14px; color:#b9ad8c; line-height:1.65;
+}
+.res-foot strong{
+  font-style:normal; font-family:var(--sans); font-weight:600;
+  color:var(--gold-bright);
+}
+
+/* ============= MODAL ============= */
+.modal-back{
+  position:fixed; inset:0; z-index:200;
+  background:radial-gradient(ellipse at center, rgba(28,30,74,.7), rgba(8,7,13,.96));
+  backdrop-filter:blur(12px);
+  display:none;
+  align-items:flex-start; justify-content:center;
+  padding:30px 16px; overflow-y:auto;
+}
+.modal-back.show{display:flex; animation:fadeIn .25s}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+.modal{
+  position:relative;
+  width:min(900px, 100%);
+  background:linear-gradient(180deg, var(--ink-2), var(--ink));
+  border:1px solid rgba(229,177,90,.3);
+  border-radius:2px;
+  box-shadow:0 40px 100px rgba(0,0,0,.7), 0 0 0 1px rgba(229,177,90,.1);
+  overflow:hidden;
+  animation:modalIn .35s cubic-bezier(.4,0,.2,1);
+}
+@keyframes modalIn{from{transform:translateY(20px) scale(.98); opacity:0}to{transform:none; opacity:1}}
+
+.modal-close{
+  position:absolute; top:14px; right:14px; z-index:5;
+  width:38px; height:38px; border-radius:50%;
+  background:rgba(8,7,13,.7);
+  border:1px solid rgba(229,177,90,.3);
+  color:var(--parchment); cursor:pointer;
+  font-family:var(--display); font-size:18px;
+  transition:all .2s;
+}
+.modal-close:hover{background:var(--gold); color:var(--ink); border-color:transparent}
+
+.modal-hero{
+  padding:36px 30px 26px;
+  position:relative;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(126,221,255,.18), transparent 50%),
+    radial-gradient(circle at 75% 70%, rgba(229,177,90,.12), transparent 50%),
+    linear-gradient(180deg, var(--ink-3), var(--ink-2));
+  border-bottom:1px solid rgba(229,177,90,.2);
+}
+.modal-eyebrow{
+  font-family:var(--mono); font-size:10px; letter-spacing:.3em;
+  color:var(--rune); text-transform:uppercase; margin-bottom:10px;
+}
+.modal-hero h2{
+  font-family:var(--display); font-weight:600;
+  font-size:clamp(28px, 4vw, 44px);
+  color:var(--parchment); line-height:1; letter-spacing:-.01em;
+}
+
+.modal-body{padding:26px 30px}
+
+.dialog{
+  display:grid; grid-template-columns:60px 1fr; gap:14px;
+  align-items:start;
+  padding:18px;
+  background:linear-gradient(180deg, var(--parchment), var(--parchment-2));
+  color:var(--ink);
+  border-left:3px solid var(--copper);
+  margin-bottom:20px;
+  border-radius:2px;
+}
+.dialog .avatar{
+  width:60px; height:60px; border-radius:50%;
+  display:grid; place-items:center; font-size:28px;
+  background:radial-gradient(circle, var(--rune), var(--indigo) 70%);
+  border:2px solid var(--gold);
+  box-shadow:0 0 16px rgba(229,177,90,.4);
+}
+.dialog .bubble{
+  font-family:var(--serif); font-size:16px; line-height:1.55;
+}
+.dialog .bubble b{font-family:var(--sans); font-weight:600; color:var(--copper)}
+
+.modal-grid{
+  display:grid; grid-template-columns:1fr 1fr; gap:12px;
+}
+.modal-info{
+  padding:16px;
+  background:rgba(126,221,255,.05);
+  border:1px solid rgba(126,221,255,.18);
+  border-radius:2px;
+  font-family:var(--sans); font-size:14px; line-height:1.55;
+  color:#cfc4a4;
+}
+.modal-info b{
+  display:block;
+  font-family:var(--mono); font-size:10px; letter-spacing:.25em;
+  text-transform:uppercase; color:var(--gold-bright);
+  margin-bottom:8px;
+}
+
+.empty{
+  grid-column:1/-1;
+  padding:60px 30px; text-align:center;
+  background:rgba(255,255,255,.02);
+  border:1px dashed rgba(229,177,90,.2);
+  border-radius:2px;
+}
+.empty .empty-icon{font-size:36px; opacity:.5; margin-bottom:10px}
+.empty p{
+  font-family:var(--serif); font-style:italic;
+  color:#9a8e6e; font-size:15px;
+}
+
+/* ============= FOOTER ============= */
+.footer{
+  position:relative;
+  margin-top:80px;
+  padding:60px 24px 40px;
+  border-top:1px solid rgba(229,177,90,.18);
+  background:linear-gradient(180deg, transparent, rgba(8,7,13,.7));
+  text-align:center;
+}
+.footer::before{
+  content:"◆ ◆ ◆";
+  position:absolute; top:-10px; left:50%; transform:translateX(-50%);
+  background:var(--ink); padding:0 16px;
+  font-family:var(--mono); color:var(--gold);
+  letter-spacing:.6em; font-size:10px;
+}
+.footer-mark{
+  font-family:var(--display); font-weight:600;
+  font-size:22px;
+  background:linear-gradient(180deg, var(--gold-bright), var(--copper));
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  margin-bottom:8px;
+  display:flex; align-items:center; justify-content:center; gap:14px;
+  flex-wrap:wrap;
+}
+.footer-mark .wolf{
+  font-size:24px;
+  -webkit-text-fill-color:initial;
+  animation:wolfPace 3s ease-in-out infinite alternate;
+  display:inline-block;
+}
+@keyframes wolfPace{
+  from{transform:translateY(0) rotate(-4deg)}
+  to{transform:translateY(-4px) rotate(4deg)}
+}
+.footer-tag{
+  font-family:var(--serif); font-style:italic;
+  color:var(--rune); font-size:14px;
+  letter-spacing:.04em;
+}
+.footer-links{
+  display:flex; justify-content:center; gap:14px; flex-wrap:wrap;
+  margin-top:20px;
+}
+.footer-links a{
+  font-family:var(--mono); font-size:11px; letter-spacing:.2em;
+  text-transform:uppercase;
+  color:var(--parchment-2);
+  text-decoration:none;
+  padding:8px 14px;
+  border:1px solid rgba(229,177,90,.25);
+  transition:all .2s;
+  border-radius:2px;
+}
+.footer-links a:hover{
+  border-color:var(--gold); color:var(--gold-bright);
+  background:rgba(229,177,90,.05);
+}
+.footer-credit{
+  margin-top:24px;
+  font-family:var(--mono); font-size:10px;
+  color:#6b6045; letter-spacing:.15em;
+}
+
+/* ============= RESPONSIVE ============= */
+@media(max-width:1100px){
+  .hero-grid{grid-template-columns:1fr}
+  .hero-right{margin:0 auto; max-width:420px}
+  .main{grid-template-columns:1fr}
+  .side{position:static}
+  .lab{grid-template-columns:1fr}
+  .res-grid{grid-template-columns:1fr}
+  .discovery{grid-template-columns:1fr 1fr}
+}
+
+@media(max-width:760px){
+  .topnav-inner{flex-direction:column; align-items:stretch}
+  .nav-actions{justify-content:center}
+  .hero{padding:40px 20px 60px; min-height:auto}
+  .hero-stats{grid-template-columns:repeat(2, 1fr)}
+  .stat:nth-child(2){border-right:none}
+  .discovery{grid-template-columns:1fr; padding:18px}
+  .cards{grid-template-columns:1fr}
+  .modal-grid{grid-template-columns:1fr}
+  .res-card{grid-template-columns:auto 1fr; gap:14px; padding:20px}
+  .res-arrow{display:none}
+  .section{padding:60px 20px}
+  .wolf-speech{position:static; margin-top:20px; transform:none}
+  .wolf-speech::before{display:none}
+}
+
+@media print{
+  .topnav,.discovery,.side,.lab,.footer,.btn,.modal-back,.atmos,.atmos-grain,.constellation,.aurora,.ember-field{display:none!important}
+  body{background:#fff;color:#000}
+  .term-card{break-inside:avoid; border:1px solid #ccc; background:#fff}
+  .cards{grid-template-columns:1fr 1fr}
+  .resources{display:none}
+}
+
+/* ============= CONTENT ENRICHMENT LAYER — non-destructive override ============= */
+.knowledge-arc{
+  margin-top:70px;
+  position:relative;
+}
+.arc-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:16px;
+  margin-top:28px;
+}
+.arc-card{
+  position:relative;
+  min-height:250px;
+  padding:24px;
+  background:
+    radial-gradient(circle at 20% 0%, rgba(126,221,255,.10), transparent 42%),
+    linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.01)),
+    rgba(15,13,26,.54);
+  border:1px solid rgba(229,177,90,.16);
+  border-radius:2px;
+  overflow:hidden;
+  transition:transform .28s cubic-bezier(.4,0,.2,1), border-color .28s, box-shadow .28s;
+}
+.arc-card:hover{
+  transform:translateY(-5px);
+  border-color:rgba(229,177,90,.45);
+  box-shadow:0 24px 58px -24px rgba(229,177,90,.34);
+}
+.arc-card::before{
+  content:""; position:absolute; inset:0 0 auto 0; height:2px;
+  background:linear-gradient(90deg,var(--gold),var(--rune),var(--lavender));
+  opacity:.8;
+}
+.arc-num{
+  font-family:var(--display);
+  font-size:56px;
+  line-height:.8;
+  color:rgba(229,177,90,.13);
+  font-weight:800;
+  margin-bottom:16px;
+}
+.arc-card h3{
+  font-family:var(--display);
+  font-size:22px;
+  line-height:1.1;
+  color:var(--parchment);
+  margin-bottom:10px;
+}
+.arc-card p{
+  font-family:var(--serif);
+  color:#b9ad8c;
+  font-style:italic;
+  font-size:14px;
+  line-height:1.55;
+  margin-bottom:16px;
+}
+.arc-tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin-bottom:18px;
+}
+.arc-tags span{
+  font-family:var(--mono);
+  font-size:9px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--rune);
+  border:1px solid rgba(126,221,255,.22);
+  padding:5px 7px;
+  background:rgba(126,221,255,.045);
+}
+.arc-card .mini{
+  width:100%;
+}
+
+.scenario-scroll{
+  margin-top:46px;
+  display:grid;
+  grid-template-columns:1.05fr .95fr;
+  gap:24px;
+  align-items:start;
+}
+.scenario-book{
+  position:relative;
+  padding:30px;
+  background:
+    linear-gradient(135deg, rgba(241,230,200,.08), rgba(126,221,255,.035)),
+    rgba(15,13,26,.56);
+  border:1px solid rgba(229,177,90,.18);
+  border-radius:2px;
+}
+.scenario-book::before{
+  content:"ÇOCUK DOSTU KULLANIM PUSULASI";
+  position:absolute;
+  top:-11px;
+  left:24px;
+  background:var(--ink);
+  padding:0 12px;
+  font-family:var(--mono);
+  font-size:10px;
+  letter-spacing:.22em;
+  color:var(--gold);
+}
+.compass-list{
+  list-style:none;
+  display:grid;
+  gap:12px;
+  margin-top:8px;
+}
+.compass-list li{
+  display:grid;
+  grid-template-columns:36px 1fr;
+  gap:12px;
+  align-items:start;
+  padding:12px;
+  border:1px solid rgba(229,177,90,.12);
+  background:rgba(255,255,255,.025);
+}
+.compass-list b{
+  display:block;
+  color:var(--parchment);
+  font-size:14px;
+  margin-bottom:3px;
+}
+.compass-list span{
+  display:block;
+  color:#a89c7a;
+  font-family:var(--serif);
+  font-style:italic;
+  font-size:14px;
+  line-height:1.45;
+}
+.compass-icon{
+  width:34px;
+  height:34px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  background:rgba(229,177,90,.10);
+  border:1px solid rgba(229,177,90,.25);
+}
+
+.micro-missions{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+}
+.micro-card{
+  padding:18px;
+  background:rgba(255,255,255,.028);
+  border:1px solid rgba(126,221,255,.16);
+  border-radius:2px;
+  min-height:138px;
+  transition:all .24s;
+}
+.micro-card:hover{
+  border-color:rgba(126,221,255,.42);
+  background:rgba(126,221,255,.055);
+}
+.micro-card h4{
+  font-family:var(--display);
+  color:var(--gold-bright);
+  font-size:17px;
+  margin-bottom:8px;
+}
+.micro-card p{
+  color:#a89c7a;
+  font-family:var(--serif);
+  font-size:14px;
+  line-height:1.45;
+  font-style:italic;
+}
+.source-badges{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:20px;
+}
+.source-badges span{
+  font-family:var(--mono);
+  font-size:10px;
+  color:var(--parchment-2);
+  padding:7px 9px;
+  border:1px solid rgba(229,177,90,.2);
+  background:rgba(229,177,90,.04);
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+
+.res-card.extended-resource .res-emblem{
+  font-size:12px;
+}
+@media(max-width:1100px){
+  .arc-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .scenario-scroll{grid-template-columns:1fr}
+}
+@media(max-width:760px){
+  .arc-grid,.micro-missions{grid-template-columns:1fr}
+}
+
+
+
+/* ============= SINGLE TERM PDF / PRINT SHEET ============= */
+.term-print-sheet{display:none}
+
+@media print{
+  @page{size:A4; margin:14mm}
+
+  body.print-single-term{
+    background:#fff!important;
+    color:#1e160b!important;
+  }
+
+  body.print-single-term > *:not(.term-print-sheet){
+    display:none!important;
+  }
+
+  body.print-single-term .term-print-sheet{
+    display:block!important;
+    position:static!important;
+    width:100%!important;
+    min-height:100vh!important;
+    padding:0!important;
+    background:#fff!important;
+    color:#1e160b!important;
+    font-family:var(--sans)!important;
+  }
+
+  body.print-single-term .term-print-card{
+    display:block!important;
+    width:100%!important;
+    min-height:250mm!important;
+    padding:18mm!important;
+    border:2px solid #c98e1a!important;
+    background:
+      linear-gradient(180deg,rgba(245,208,137,.16),rgba(255,255,255,1) 22%),
+      #fff!important;
+    color:#1e160b!important;
+    box-shadow:none!important;
+    break-inside:avoid!important;
+  }
+
+  body.print-single-term .term-print-brand{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:space-between!important;
+    gap:12px!important;
+    padding-bottom:10mm!important;
+    margin-bottom:10mm!important;
+    border-bottom:1px solid #d9c89b!important;
+    color:#6f4c11!important;
+    font-size:10pt!important;
+    letter-spacing:.08em!important;
+    text-transform:uppercase!important;
+    font-weight:800!important;
+  }
+
+  body.print-single-term .term-print-title{
+    display:flex!important;
+    align-items:flex-start!important;
+    gap:12px!important;
+    margin-bottom:8mm!important;
+  }
+
+  body.print-single-term .term-print-icon{
+    display:grid!important;
+    place-items:center!important;
+    width:18mm!important;
+    height:18mm!important;
+    border:1.5px solid #c98e1a!important;
+    border-radius:50%!important;
+    background:#fff7df!important;
+    font-size:24pt!important;
+    flex:0 0 auto!important;
+  }
+
+  body.print-single-term .term-print-title h1{
+    margin:0!important;
+    color:#1e160b!important;
+    font-family:var(--display)!important;
+    font-size:30pt!important;
+    line-height:1.05!important;
+    letter-spacing:-.01em!important;
+  }
+
+  body.print-single-term .term-print-meta{
+    margin-top:3mm!important;
+    color:#6f4c11!important;
+    font-size:10pt!important;
+    font-weight:700!important;
+  }
+
+  body.print-single-term .term-print-definition{
+    margin:0 0 8mm!important;
+    padding:7mm!important;
+    border-left:4px solid #c98e1a!important;
+    background:#fff7df!important;
+    color:#2a1c0e!important;
+    font-size:14pt!important;
+    line-height:1.55!important;
+    font-family:var(--serif)!important;
+    font-weight:600!important;
+  }
+
+  body.print-single-term .term-print-grid{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:5mm!important;
+  }
+
+  body.print-single-term .term-print-box{
+    display:block!important;
+    padding:5mm!important;
+    border:1px solid #d9c89b!important;
+    background:#fff!important;
+    color:#1e160b!important;
+    break-inside:avoid!important;
+  }
+
+  body.print-single-term .term-print-box b{
+    display:block!important;
+    margin-bottom:2mm!important;
+    color:#7a4b00!important;
+    font-size:10pt!important;
+    letter-spacing:.09em!important;
+    text-transform:uppercase!important;
+  }
+
+  body.print-single-term .term-print-box span{
+    color:#1e160b!important;
+    font-size:12pt!important;
+    line-height:1.55!important;
+  }
+
+  body.print-single-term .term-print-footer{
+    display:flex!important;
+    justify-content:space-between!important;
+    align-items:flex-end!important;
+    gap:12px!important;
+    margin-top:12mm!important;
+    padding-top:5mm!important;
+    border-top:1px solid #d9c89b!important;
+    color:#6f4c11!important;
+    font-size:9pt!important;
+    line-height:1.4!important;
+  }
+
+  body.print-single-term .term-print-footer strong{
+    color:#1e160b!important;
+  }
+}
+
+</style>
+</head>
+<body>
+
+<!-- Atmospheric layers -->
+<div class="atmos"></div>
+<div class="atmos-grain"></div>
+<div class="constellation"></div>
+<div class="aurora"></div>
+<div class="ember-field" id="emberField"></div>
+
+<!-- Navigation -->
+<nav class="topnav">
+  <div class="topnav-inner">
+    <div class="brand">
+      <div class="brand-mark">🐺</div>
+      <div class="brand-text">
+        <span class="b1">GÖKBÖRÜ</span>
+        <span class="b2">AI'HAN ACADEMY · Yapay Zekâ Sözlüğü</span>
+      </div>
+    </div>
+    <div class="nav-actions">
+      <button class="btn ghost-rune small" onclick="document.getElementById('dictionary').scrollIntoView()">Sözlük</button>
+      <button class="btn ghost-rune small" onclick="document.getElementById('resources').scrollIntoView()">Kaynaklar</button>
+      <button class="btn primary small" onclick="randomTerm()">Rastgele Kavram</button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-grid">
+    <div class="hero-left">
+      <div class="hero-eyebrow eyebrow"><span>AI'HAN ACADEMY</span> · <span>Çocuklar için</span></div>
+
+      <h1 class="hero-title">
+        <span class="line-1">Gökbörü'nün</span>
+        <span class="line-2">yapay zekâ</span>
+        <span class="line-3">sözlüğü.</span>
+      </h1>
+
+      <p class="hero-lede">
+        Bozkırın bilge kurdu rehberin oluyor. <strong>Veri, algoritma, model, prompt, ajan, etik</strong> ve daha onlarca kavramı; somut örnekler, mini etkinlikler ve dikkat notlarıyla keşfet. UNICEF, UNESCO ve OECD kaynaklı çocuk dostu yapay zekâ okuryazarlığı çerçevesine dayanır.
+      </p>
+
+      <div class="hero-cta">
+        <button class="btn primary" onclick="document.getElementById('dictionary').scrollIntoView()">Yolculuğa Başla →</button>
+        <button class="btn ghost-rune" onclick="buildMatchGame(true)">Eşleştirme Oyunu</button>
+      </div>
+
+      <div class="hero-stats">
+        <div class="stat"><div class="num" id="statTerms">0</div><span class="lbl">Kavram</span></div>
+        <div class="stat"><div class="num">8</div><span class="lbl">Kategori</span></div>
+        <div class="stat"><div class="num">3</div><span class="lbl">Seviye</span></div>
+        <div class="stat"><div class="num" id="statDone">0</div><span class="lbl">Öğrenildi</span></div>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="portal-stage">
+        <div class="portal-ring pr-1"></div>
+        <div class="portal-ring pr-2"></div>
+        <div class="portal-ring pr-3"></div>
+        <div class="portal-ring pr-4"></div>
+
+        <div class="glyph-orbit">
+          <span class="glyph g1">◇ AI ◇</span>
+          <span class="glyph g2">⟁ DATA</span>
+          <span class="glyph g3">◇ MIND</span>
+          <span class="glyph g4">⟁ CODE</span>
+          <span class="glyph g5">✦</span>
+          <span class="glyph g6">✦</span>
+        </div>
+
+        <div class="wolf-core"></div>
+        <div class="wolf-tag">GÖKBÖRÜ</div>
+
+        <div class="wolf-speech">
+          <span class="who">Bilge rehberinden</span>
+          <span id="bilgeSpeech">Merhaba! Ben Gökbörü. Bir kavram seç; sana çocukların anlayacağı şekilde anlatayım.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- DISCOVERY / SEARCH -->
+<section class="section" id="dictionary" style="padding-top:40px">
+  <div class="wrap">
+    <div class="eyebrow"><span>Bölüm I</span> · <span>Keşif</span></div>
+    <h2 class="section-heading">Sözlüğü <span class="accent">aralayın.</span></h2>
+    <p class="section-sub">Aramada Türkçe karakter ve şapka farklarını yakalar. "zeka" yazsanız "Yapay Zekâ"yı, "uretken" yazsanız "Üretken Yapay Zekâ"yı bulur.</p>
+
+    <div class="discovery">
+      <div class="field">
+        <label>Arama</label>
+        <input id="searchInput" type="search" placeholder="Kavram ara: yapay zeka, prompt, ajan, rag, deepfake...">
+      </div>
+      <div class="field">
+        <label>Kategori</label>
+        <select id="categorySelect">
+          <option value="all">Tüm kategoriler</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Seviye</label>
+        <select id="levelSelect">
+          <option value="all">Tüm seviyeler</option>
+          <option value="1">Başlangıç</option>
+          <option value="2">Orta</option>
+          <option value="3">İleri</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Sıralama</label>
+        <select id="sortSelect">
+          <option value="az">A → Z</option>
+          <option value="za">Z → A</option>
+          <option value="level">Seviyeye göre</option>
+          <option value="category">Kategoriye göre</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="chips" id="categoryChips"></div>
+
+    <!-- MAIN -->
+    <div class="main">
+      <main>
+        <div class="section-bar">
+          <h2><em>Kavram</em> kartları</h2>
+          <div class="count-pill" id="resultCount">0 kavram</div>
+        </div>
+        <div class="cards" id="cards"></div>
+      </main>
+
+      <aside class="side">
+        <div class="sidebox">
+          <div class="guide-block">
+            <div class="guide-avatar">🐺</div>
+            <div class="guide-text">
+              Gökbörü rehberin burada. Kavram seç, örnekleri incele, eşleştir ve öğrendikçe ilerle.
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebox">
+          <h3><span class="icn">🏅</span> Öğrenme İlerlemesi</h3>
+          <div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
+          <div class="progress-text" id="progressText">Henüz kavram işaretlenmedi.</div>
+        </div>
+
+        <div class="sidebox" id="matchGameBox">
+          <h3><span class="icn">🧩</span> Eşleştirme</h3>
+          <p style="font-family:var(--serif); font-style:italic; font-size:13px; color:#a89c7a; line-height:1.5;">
+            Soldan bir kavram, sağdan ona ait açıklamayı seç. Doğru çiftler kilitlenir.
+          </p>
+          <div class="match-toolbar">
+            <button class="btn primary small" onclick="buildMatchGame()">Yeni Tur</button>
+            <button class="btn small" onclick="resetMatchSelection()">Seçimi Temizle</button>
+          </div>
+          <div class="match-score" id="matchScore">Oyun hazırlanıyor...</div>
+          <div class="match-board" id="matchBoard"></div>
+          <div class="feedback" id="matchFeedback"></div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- LAB -->
+<section class="section">
+  <div class="wrap">
+    <div class="eyebrow"><span>Bölüm II</span> · <span>Atölye</span></div>
+    <h2 class="section-heading">Yapay zekâ <span class="accent">atölyesi.</span></h2>
+    <p class="section-sub">Üç küçük çalışma masası. Yaz, kontrol et, doğrula. Gökbörü her birinde küçük bir not bırakıyor.</p>
+
+    <div class="lab">
+      <div class="lab-card">
+        <div class="lab-num">01</div>
+        <h3>Prompt Dedektifi</h3>
+        <p>Yapay zekâdan iyi cevap almak için açık, amaçlı ve örnekli komut yazmayı dene.</p>
+        <textarea id="promptBox" placeholder="Örn: 9 yaşındaki çocuklara veri kavramını 5 cümlede, somut örneklerle anlat."></textarea>
+        <button class="btn primary" style="width:100%; margin-top:12px" onclick="analyzePrompt()">Promptu İncele</button>
+        <div class="output" id="promptOutput">Promptunu yaz ve incele düğmesine bas.</div>
+      </div>
+
+      <div class="lab-card">
+        <div class="lab-num">02</div>
+        <h3>Veri Dedektifi</h3>
+        <p>YZ'nin iyi öğrenmesi için veri doğru, dengeli ve temiz olmalı. Veri setindeki sorunu bul.</p>
+        <button class="btn primary" style="width:100%; margin-top:auto" onclick="dataDetective()">Veri Setini Kontrol Et</button>
+        <div class="output" id="dataOutput">Kontrol edilecek örnekler hazır.</div>
+      </div>
+
+      <div class="lab-card">
+        <div class="lab-num">03</div>
+        <h3>Güvenli Kullanım</h3>
+        <p>YZ cevabını hemen doğru kabul etme. Kaynak, gizlilik ve yaş uygunluğu kontrolü yap.</p>
+        <button class="btn primary" style="width:100%; margin-top:auto" onclick="safetyCheck()">Kontrol Listesi Oluştur</button>
+        <div class="output" id="safetyOutput">Güvenli kullanım adımlarını görmek için düğmeye bas.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- LEARNING PATHS / CONTENT ENRICHMENT -->
+<section class="section knowledge-arc" id="learningRoutes">
+  <div class="wrap">
+    <div class="eyebrow"><span>Bölüm III</span> · <span>Öğrenme Rotası</span></div>
+    <h2 class="section-heading">Kavramdan <span class="accent">okuryazarlığa.</span></h2>
+    <p class="section-sub">
+      Bu bölüm sözlüğü yalnızca kelime listesi olmaktan çıkarır: çocuklar kavramı tanır, üretir, yönetir ve tasarlar. Akış; UNESCO’nun öğrenci yetkinlikleri, UNICEF’in çocuk merkezli YZ yaklaşımı ve OECD/EC destekli AI Literacy Framework mantığıyla uyumludur.
+    </p>
+
+    <div class="arc-grid">
+      <article class="arc-card">
+        <div class="arc-num">01</div>
+        <h3>Anla ve Sorgula</h3>
+        <p>YZ nedir, ne değildir, nerede işe yarar ve nerede hata yapabilir? Çocuk önce temel kavramları ve sınırları öğrenir.</p>
+        <div class="arc-tags"><span>Yapay Zekâ</span><span>Veri</span><span>Model</span></div>
+        <button class="mini" onclick="focusLearningPath('Temel Kavramlar','yapay zeka')">Bu Rotayı Aç</button>
+      </article>
+
+      <article class="arc-card">
+        <div class="arc-num">02</div>
+        <h3>Üret ve Düzenle</h3>
+        <p>Prompt, üretken yapay zekâ, telif, atıf ve sentetik medya gibi kavramlarla yaratıcı ama sorumlu üretim pratiği kurulur.</p>
+        <div class="arc-tags"><span>Prompt</span><span>Üretken YZ</span><span>Atıf</span></div>
+        <button class="mini" onclick="focusLearningPath('Üretken Yapay Zekâ','prompt')">Bu Rotayı Aç</button>
+      </article>
+
+      <article class="arc-card">
+        <div class="arc-num">03</div>
+        <h3>Güvenli Yönet</h3>
+        <p>Kaynak kontrolü, yanlış bilgi, gizlilik, rıza, çocuk hakları ve risk yönetimi üzerinden güvenli kullanım alışkanlığı gelişir.</p>
+        <div class="arc-tags"><span>Güvenlik</span><span>Gizlilik</span><span>Kaynak</span></div>
+        <button class="mini" onclick="focusLearningPath('Güvenlik ve Etik','kaynak')">Bu Rotayı Aç</button>
+      </article>
+
+      <article class="arc-card">
+        <div class="arc-num">04</div>
+        <h3>Tasarla ve Denetle</h3>
+        <p>Ajanlar, araç kullanımı, model kartı, veri kartı ve etki değerlendirmesiyle çocuklar sistemi yalnızca kullanmaz; nasıl sorumlu tasarlanacağını da düşünür.</p>
+        <div class="arc-tags"><span>Ajan</span><span>Model Kartı</span><span>Etki</span></div>
+        <button class="mini" onclick="focusLearningPath('Güncel Kavramlar','model kartı')">Bu Rotayı Aç</button>
+      </article>
+    </div>
+
+    <div class="scenario-scroll">
+      <div class="scenario-book">
+        <ul class="compass-list">
+          <li><div class="compass-icon">🔎</div><div><b>1. Kaynağı sor.</b><span>Bu bilgi nereden geldi? Kurum, yazar, tarih ve kanıt görünüyor mu?</span></div></li>
+          <li><div class="compass-icon">🛡️</div><div><b>2. Kişisel veriyi koru.</b><span>Ad, okul, adres, fotoğraf, ses ve konum bilgisi paylaşılmadan önce yetişkin desteği alınmalı.</span></div></li>
+          <li><div class="compass-icon">⚖️</div><div><b>3. Adil mi diye bak.</b><span>YZ cevabı bir kişiyi, dili, kültürü veya grubu haksız biçimde dışlıyor mu?</span></div></li>
+          <li><div class="compass-icon">🧠</div><div><b>4. İnsan kararını unutma.</b><span>YZ yardımcıdır; son kontrol, sorumluluk ve etik değerlendirme insanda kalır.</span></div></li>
+          <li><div class="compass-icon">📚</div><div><b>5. Öğrenmeye çevir.</b><span>Hazır cevabı kopyalamak yerine kavramı anla, örnekle, düzenle ve kendi cümlenle anlat.</span></div></li>
+        </ul>
+        <div class="source-badges">
+          <span>UNICEF çocuk hakları</span>
+          <span>UNESCO etik ve yetkinlik</span>
+          <span>OECD medya & YZ okuryazarlığı</span>
+          <span>NIST risk yönetimi</span>
+        </div>
+      </div>
+
+      <div class="micro-missions">
+        <article class="micro-card">
+          <h4>Kütüphane Görevi</h4>
+          <p>YZ’nin önerdiği üç kitabı katalog, yaş düzeyi ve konu uygunluğuna göre kontrol et.</p>
+        </article>
+        <article class="micro-card">
+          <h4>Haber Dedektifi</h4>
+          <p>Bir haber başlığını al; kaynağı, tarihi ve başka güvenilir kaynaklarda geçip geçmediğini incele.</p>
+        </article>
+        <article class="micro-card">
+          <h4>Prompt Ustası</h4>
+          <p>Aynı soruyu belirsiz, açık ve kaynak isteyen üç farklı promptla dene; cevapları karşılaştır.</p>
+        </article>
+        <article class="micro-card">
+          <h4>Veri Avcısı</h4>
+          <p>Bir veri setinde eksik, dengesiz veya yanlış etiketli örnekleri bulmaya çalış.</p>
+        </article>
+        <article class="micro-card">
+          <h4>Deepfake Alarmı</h4>
+          <p>Bir görsel veya ses içeriğinde kaynağı, bağlamı, tutarsızlıkları ve etiketleri kontrol et.</p>
+        </article>
+        <article class="micro-card">
+          <h4>Etik Tasarımcı</h4>
+          <p>Çocuklar için bir YZ aracı tasarla: hangi veriyi toplar, hangi veriyi asla toplamaz?</p>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESOURCES -->
+<section class="section resources" id="resources">
+  <div class="wrap">
+    <div class="eyebrow"><span>Bölüm IV</span> · <span>Kaynaklar</span></div>
+    <h2 class="section-heading">Otorite kurumların <span class="accent">çalışmaları.</span></h2>
+    <div class="res-intro">
+      <p class="section-sub">
+        Bu sözlüğün içerik çerçevesi; UNICEF, UNESCO, OECD, MIT ve Common Sense Media gibi uluslararası otorite kurumların çocuklar için yapay zekâ ve yapay zekâ okuryazarlığı çalışmalarına dayanır. Aşağıdaki kaynakları öğretmenler, ebeveynler ve meraklı öğrenciler için bir araya getirdik.
+      </p>
+    </div>
+
+    <div class="res-grid">
+
+      <a class="res-card" href="https://www.unicef.org/innocenti/reports/policy-guidance-ai-children" target="_blank" rel="noopener">
+        <div class="res-emblem unicef">UNICEF</div>
+        <div class="res-body">
+          <div class="res-org">UNICEF · Innocenti</div>
+          <div class="res-title">Policy Guidance on AI for Children (v3.0)</div>
+          <div class="res-desc">Çocuk haklarına dayalı yapay zekâ sistemleri için 10 temel gereksinim; üretken yapay zekâ ve YZ refakatçileri dahil güncel risklerle.</div>
+        </div>
+        <div class="res-arrow">→</div>
+      </a>
+
+      <a class="res-card" href="https://www.unesco.org/en/articles/ai-competency-framework-students" target="_blank" rel="noopener">
+        <div class="res-emblem unesco">UNESCO</div>
+        <div class="res-body">
+          <div class="res-org">UNESCO · 2024</div>
+          <div class="res-title">AI Competency Framework for Students</div>
+          <div class="res-desc">Öğrenciler için 4 boyut (insan-merkezli düşünce, etik, teknik ve tasarım) ve 12 yetkinlik üzerine kurulu okuryazarlık çerçevesi.</div>
+        </div>
+        <div class="res-arrow">→</div>
+      </a>
+
+      <a class="res-card" href="https://ailiteracyframework.org/" target="_blank" rel="noopener">
+        <div class="res-emblem oecd">OECD · EC</div>
+        <div class="res-body">
+          <div class="res-org">OECD & European Commission</div>
+          <div class="res-title">AI Literacy Framework (AILit)</div>
+          <div class="res-desc">İlk ve ortaöğretim için Engage / Create / Manage / Design eksenli 22 yetkinlik. PISA 2029 MAIL değerlendirmesinin temelini oluşturuyor.</div>
+        </div>
+        <div class="res-arrow">→</div>
+      </a>
+
+      <a class="res-card" href="https://dayofai.org/" target="_blank" rel="noopener">
+        <div class="res-emblem mit">MIT · RAISE</div>
+        <div class="res-body">
+          <div class="res-org">MIT RAISE · Day of AI</div>
+          <div class="res-title">K–12 AI Literacy Curriculum</div>
+          <div class="res-desc">170+ ülkede 670.000+ öğrenciye ulaşan ücretsiz K–12 müfredatı. Sorumlu YZ, etik, önyargı ve algoritma temalarıyla.</div>
+        </div>
+        <div class="res-arrow">→</div>
+      </a>
+
+      <a class="res-card" href="https://www.commonsensemedia.org/" target="_blank" rel="noopener">
+        <div class="res-emblem commonsense">CSM</div>
+        <div class="res-body">
+          <div class="res-org">Common Sense Media</div>
+          <div class="res-title">AI Literacy Toolkit for Families</div>
+          <div class="res-desc">Aileler için kısa videolar, sohbet kartları ve uygulamalı etkinlikler. Day of AI iş birliğinde okul ve aileler için yol haritası.</div>
+        </div>
+        <div class="res-arrow">→</div>
+      </a>
+
+      <a class="res-card" href="https://yegitek.meb.gov.tr/" target="_blank" rel="noopener">
+        <div class="res-emblem meb">MEB</div>
+        <div class="res-body">
+          <div class="res-org">MEB · YEĞİTEK · BTK Akademi</div>
+          <div class="res-title">Yapay Zekâ Okuryazarlığı Eğitimleri</div>
+          <div class="res-desc">Türkiye Yüzyılı Maarif Modeli kapsamında veri, dijital ve yapay zekâ okuryazarlığı eğitimleri; öğretmenler için el kitabı.</div>
+        </div>
+        <div class="res-arrow">→</div>
+      </a>
+
+      <a class="res-card" href="https://www.unicef.org/innocenti/projects/ai-for-children" target="_blank" rel="noopener">
+        <div class="res-emblem unicef">AI4C</div>
+        <div class="res-body">
+          <div class="res-org">UNICEF · AI for Children Project</div>
+          <div class="res-title">AI for Children: Vaka Çalışmaları</div>
+          <div class="res-desc">Hükümetler ve şirketlerin politika rehberini sahada nasıl uyguladığını gösteren sekiz vaka çalışması.</div>
+        </div>
+        <div class="res-arrow">→</div>
+      </a>
+
+      <a class="res-card" href="https://www.oecd.org/en/about/projects/pisa-2029-media-and-artificial-intelligence-literacy.html" target="_blank" rel="noopener">
+        <div class="res-emblem oecd">PISA</div>
+        <div class="res-body">
+          <div class="res-org">OECD · PISA 2029</div>
+          <div class="res-title">Media & AI Literacy (MAIL)</div>
+          <div class="res-desc">2029'da uygulanacak ilk uluslararası medya ve YZ okuryazarlığı değerlendirmesi. Öğrencilerin eleştirel-yaratıcı YZ yetkinliklerini ölçer.</div>
+        </div>
+        <div class="res-arrow">→</div>
+      </a>
+
+
+      <a class="res-card extended-resource" href="https://www.unesco.org/en/articles/guidance-generative-ai-education-and-research" target="_blank" rel="noopener">
+        <div class="res-emblem unesco">GenAI</div>
+        <div class="res-body">
+          <div class="res-org">UNESCO · Generative AI</div>
+          <div class="res-title">Guidance for Generative AI in Education and Research</div>
+          <div class="res-desc">Üretken YZ’nin eğitimde güvenli, etik ve insan merkezli kullanımına dair yaş uygunluğu, veri gizliliği ve politika önerileri.</div>
+        </div>
+        <div class="res-arrow">→</div>
+      </a>
+
+      <a class="res-card extended-resource" href="https://www.nist.gov/itl/ai-risk-management-framework" target="_blank" rel="noopener">
+        <div class="res-emblem oecd">NIST</div>
+        <div class="res-body">
+          <div class="res-org">NIST · AI RMF</div>
+          <div class="res-title">AI Risk Management Framework</div>
+          <div class="res-desc">YZ risklerini belirleme, ölçme, yönetme ve izleme yaklaşımı. Güvenli kullanım ve sistem denetimi için güçlü referans.</div>
+        </div>
+        <div class="res-arrow">→</div>
+      </a>
+
+      <a class="res-card extended-resource" href="https://ai4k12.org/" target="_blank" rel="noopener">
+        <div class="res-emblem mit">AI4K12</div>
+        <div class="res-body">
+          <div class="res-org">AI4K12 Initiative</div>
+          <div class="res-title">Five Big Ideas in AI</div>
+          <div class="res-desc">Algı, temsil-akıl yürütme, öğrenme, doğal etkileşim ve toplumsal etki başlıklarıyla K–12 düzeyi YZ eğitimi için temel fikirler.</div>
+        </div>
+        <div class="res-arrow">→</div>
+      </a>
+
+      <a class="res-card extended-resource" href="https://code.org/ai" target="_blank" rel="noopener">
+        <div class="res-emblem commonsense">Code</div>
+        <div class="res-body">
+          <div class="res-org">Code.org · AI Education</div>
+          <div class="res-title">AI for Education Resources</div>
+          <div class="res-desc">Öğretmenler ve öğrenciler için YZ temelli ders materyalleri, sınıf etkinlikleri ve güvenli kullanım kaynakları.</div>
+        </div>
+        <div class="res-arrow">→</div>
+      </a>
+
+    </div>
+
+    <div class="res-foot">
+      <strong>Not:</strong> Bu sözlükteki kavram tanımları ve örnekler, yukarıdaki uluslararası çerçevelerin çocuk dostu yorumudur. Sınıf, kütüphane veya ev kullanımında orijinal kaynak belgelere göz atmak; yaş uygunluğu, gizlilik ve etik konularda en güncel rehberi sunar.
+    </div>
+  </div>
+</section>
+
+<!-- MODAL -->
+<div class="modal-back" id="modalBack" onclick="closeModal(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="document.getElementById('modalBack').classList.remove('show')">✕</button>
+    <div class="modal-hero">
+      <div class="modal-eyebrow">Kavram Detayı</div>
+      <h2 id="modalTitle">Kavram</h2>
+    </div>
+    <div class="modal-body">
+      <div class="dialog">
+        <div class="avatar">🐺</div>
+        <div class="bubble" id="modalDefinition"></div>
+      </div>
+      <div class="modal-grid">
+        <div class="modal-info"><b>Somut Örnek</b><span id="modalExample"></span></div>
+        <div class="modal-info"><b>Mini Etkinlik</b><span id="modalActivity"></span></div>
+        <div class="modal-info"><b>Dikkat</b><span id="modalWarning"></span></div>
+        <div class="modal-info"><b>Kategori / Seviye</b><span id="modalMeta"></span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-mark">
+    <span class="wolf">🐺</span>
+    <span>Gökbörü's AI Lexicon</span>
+    <span class="wolf">✦</span>
+  </div>
+  <div class="footer-tag">Think · Code · Learn · Create</div>
+  <div class="footer-links">
+    <a href="https://www.linkedin.com/in/ayhanbozkurt/" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="https://github.com/ayhanbzkrt" target="_blank" rel="noopener">GitHub</a>
+    <a href="#dictionary">Sözlük</a>
+    <a href="#resources">Kaynaklar</a>
+  </div>
+  <div class="footer-credit">© 2026 AI'HAN LIBRARY GAMES · BY AYHAN BOZKURT · TÜRKİYE 🇹🇷</div>
+</footer>
+
+<script>
+/* ============= TERM DATA ============= */
+const TERMS = [
+  {term:"Yapay Zekâ", icon:"🤖", category:"Temel Kavramlar", level:1,
+    definition:"Bilgisayarların, telefonların veya robotların öğrenmeye, tahmin yapmaya, öneri sunmaya ve bazı işleri akıllıca yapmaya çalışmasıdır.",
+    example:"Bir uygulamanın sana seviyene uygun kitap önermesi.",
+    activity:"Evdeki üç akıllı sistemi bul: telefon önerileri, harita rotası, video önerisi gibi.",
+    warning:"Yapay zekâ insan değildir; duygusu yoktur ve yanlış cevap verebilir."},
+  {term:"YZ", icon:"✨", category:"Temel Kavramlar", level:1,
+    definition:"Yapay Zekâ ifadesinin kısa yazılışıdır.",
+    example:"\"Bu oyunda YZ ipucu veriyor.\" cümlesindeki YZ, Yapay Zekâ demektir.",
+    activity:"Bir kâğıda YZ kullanan 5 araç yaz.",
+    warning:"Kısaltmayı bilmek yetmez; nasıl çalıştığını da anlamaya çalış."},
+  {term:"Veri", icon:"📦", category:"Veri ve Öğrenme", level:1,
+    definition:"Yapay zekânın öğrenmek için kullandığı örneklerdir. Fotoğraf, ses, yazı, sayı veya ölçüm olabilir.",
+    example:"Kedi fotoğrafları, hava durumu sayıları veya kitap türleri veri olabilir.",
+    activity:"Çantandaki eşyaları say ve küçük bir veri listesi oluştur.",
+    warning:"Eksik veya yanlış veri, yapay zekânın yanlış öğrenmesine neden olabilir."},
+  {term:"Bilgi", icon:"💡", category:"Veri ve Öğrenme", level:1,
+    definition:"Verilerin anlamlı hâle gelmiş şeklidir.",
+    example:"\"Bugün 24 derece ve yağmur yok.\" ifadesi, hava durumu verilerinden üretilmiş bilgidir.",
+    activity:"3 sayı seç ve bu sayılardan anlamlı bir bilgi üret.",
+    warning:"Her veri tek başına bilgi değildir; anlamlandırmak gerekir."},
+  {term:"Algoritma", icon:"🧭", category:"Temel Kavramlar", level:1,
+    definition:"Bir işi yapmak için izlenen adım adım yol veya tariftir.",
+    example:"Diş fırçalamak: fırçayı al, macunu sür, dişlerini fırçala, ağzını çalkala.",
+    activity:"Sandviç yapma algoritmasını 5 adımda yaz.",
+    warning:"Adımlar yanlış sıradaysa sonuç da karışabilir."},
+  {term:"Girdi", icon:"➡️", category:"Temel Kavramlar", level:1,
+    definition:"Bir sisteme verdiğimiz şeydir.",
+    example:"Yapay zekâya bir fotoğraf yüklemek girdidir.",
+    activity:"Bir hesap makinesine 7 + 5 yaz. Bu işlemde girdi nedir?",
+    warning:"Girdi ne kadar açık olursa çıktı o kadar anlaşılır olabilir."},
+  {term:"Çıktı", icon:"⬅️", category:"Temel Kavramlar", level:1,
+    definition:"Bir sistemin bize verdiği sonuçtur.",
+    example:"Fotoğrafı inceleyen YZ'nin \"Bu bir elma.\" demesi çıktıdır.",
+    activity:"Bir soru sor ve aldığın cevabı çıktı olarak yaz.",
+    warning:"Çıktı doğru mu diye kontrol etmek gerekir."},
+  {term:"Model", icon:"🧠", category:"Makine Öğrenmesi", level:1,
+    definition:"Yapay zekânın örneklerden öğrenmiş hâlidir. Öğrendiklerine bakarak tahmin yapar.",
+    example:"Bir model, çok sayıda elma ve armut resmi gördükten sonra yeni resmi tanımaya çalışır.",
+    activity:"Arkadaşına 5 hayvan resmi göster ve sonra yeni resmi tahmin etmesini iste.",
+    warning:"Model, görmediği veya az gördüğü şeylerde zorlanabilir."},
+  {term:"Eğitim", icon:"🏋️", category:"Makine Öğrenmesi", level:1,
+    definition:"Yapay zekâya çok sayıda örnek göstererek öğrenmesini sağlama sürecidir.",
+    example:"Bir modele yüzlerce kedi resmi göstermek eğitimdir.",
+    activity:"Bir arkadaşına 5 farklı yaprak gösterip sonra yeni yaprağı tanımasını iste.",
+    warning:"Sadece tek tür örnekle eğitim yapılırsa model sınırlı öğrenir."},
+  {term:"Tahmin", icon:"🔮", category:"Makine Öğrenmesi", level:1,
+    definition:"Yapay zekânın öğrendiklerine bakarak bir sonuç söylemesidir.",
+    example:"\"Bu fotoğrafta köpek olma ihtimali yüksek.\" demesi tahmindir.",
+    activity:"Bugün hava bulutluysa yarın yağmur yağıp yağmayacağını tahmin et, sonra kontrol et.",
+    warning:"Tahmin kesin gerçek değildir; yanılabilir."},
+  {term:"Sınıflandırma", icon:"🗂️", category:"Makine Öğrenmesi", level:1,
+    definition:"Nesneleri veya bilgileri gruplara ayırmaktır.",
+    example:"Kitapları masal, bilim, şiir ve tarih diye ayırmak.",
+    activity:"Odandaki oyuncakları türlerine göre sınıflandır.",
+    warning:"Yanlış sınıf seçilirse aradığımız şeyi bulmak zorlaşır."},
+  {term:"Etiket", icon:"🏷️", category:"Veri ve Öğrenme", level:1,
+    definition:"Bir verinin ne olduğunu anlatan isimdir.",
+    example:"Bir fotoğrafa \"kedi\" etiketi koymak.",
+    activity:"5 nesnenin fotoğrafını düşün ve her birine doğru etiket ver.",
+    warning:"Yanlış etiket, yapay zekânın yanlış öğrenmesine sebep olur."},
+  {term:"Veri Seti", icon:"📚", category:"Veri ve Öğrenme", level:1,
+    definition:"Bir araya getirilmiş çok sayıda veri örneğidir.",
+    example:"100 elma, 100 armut, 100 muz fotoğrafından oluşan meyve veri seti.",
+    activity:"Sınıftaki kitapları türlerine göre listeleyerek küçük bir veri seti yap.",
+    warning:"Veri seti dengesizse sonuçlar adil olmayabilir."},
+  {term:"Örüntü", icon:"🔁", category:"Veri ve Öğrenme", level:1,
+    definition:"Tekrar eden düzen veya benzerliktir.",
+    example:"Pazartesi, çarşamba, cuma spor yapmak bir örüntüdür.",
+    activity:"Kırmızı-mavi-kırmızı-mavi dizisinin devamını tahmin et.",
+    warning:"Her tekrar anlamlı bir kural olmayabilir."},
+  {term:"Makine Öğrenmesi", icon:"🧩", category:"Makine Öğrenmesi", level:2,
+    definition:"Bilgisayarın her şeyi tek tek kodlanmadan, örneklerden öğrenmesidir.",
+    example:"Müzik uygulamasının dinlediğin şarkılara göre yeni şarkı önermesi.",
+    activity:"Bir arkadaşının sevdiği kitap türlerine bakarak ona yeni kitap öner.",
+    warning:"Geçmiş örnekler hatalıysa öneriler de hatalı olabilir."},
+  {term:"Denetimli Öğrenme", icon:"👩‍🏫", category:"Makine Öğrenmesi", level:2,
+    definition:"Yapay zekânın doğru cevapları önceden verilmiş örneklerle öğrenmesidir.",
+    example:"Fotoğrafların yanında \"kedi\" veya \"köpek\" etiketi varsa denetimli öğrenme yapılabilir.",
+    activity:"10 resim düşün ve her birinin doğru adını yanına yaz.",
+    warning:"Öğretmenin verdiği cevap yanlışsa öğrenci de yanlış öğrenir."},
+  {term:"Denetimsiz Öğrenme", icon:"🔍", category:"Makine Öğrenmesi", level:2,
+    definition:"Yapay zekânın doğru cevaplar verilmeden benzerlikleri kendi bulmaya çalışmasıdır.",
+    example:"Kitapları etiket vermeden kapaklarına veya konularına göre gruplamak.",
+    activity:"Renkli kalemleri hiçbir kural söylemeden gruplara ayır.",
+    warning:"Bulunan gruplar her zaman bizim istediğimiz anlamı taşımayabilir."},
+  {term:"Pekiştirmeli Öğrenme", icon:"🎮", category:"Makine Öğrenmesi", level:2,
+    definition:"Yapay zekânın deneme-yanılma ve ödül-ceza mantığıyla öğrenmesidir.",
+    example:"Bir oyun karakterinin doğru hamle yapınca puan kazanması.",
+    activity:"Labirent oyununda çıkışa yaklaştığında puan, duvara çarptığında uyarı ver.",
+    warning:"Ödül yanlış belirlenirse sistem istenmeyen davranış öğrenebilir."},
+  {term:"Derin Öğrenme", icon:"🧬", category:"Makine Öğrenmesi", level:2,
+    definition:"Yapay zekânın çok katmanlı yapılarla karmaşık örüntüleri öğrenmesidir.",
+    example:"Bir sistemin fotoğraftaki yüzleri, yazıları ve nesneleri aynı anda anlamaya çalışması.",
+    activity:"Bir resme bakıp önce renkleri, sonra şekilleri, sonra nesneleri bul.",
+    warning:"Çok veri ve güçlü bilgisayar gerekebilir."},
+  {term:"Sinir Ağı", icon:"🕸️", category:"Makine Öğrenmesi", level:2,
+    definition:"İnsan beyninden ilham alan, birçok küçük hesaplama noktasının birlikte çalıştığı model yapısıdır.",
+    example:"Bir resimde önce çizgileri, sonra şekilleri, sonra nesneyi tanımaya çalışan yapı.",
+    activity:"Arkadaşlarınla zincir kur: biri renk, biri şekil, biri nesne tahmini yapsın.",
+    warning:"Sinir ağı beynin aynısı değildir; sadece ondan ilham alır."},
+  {term:"Büyük Dil Modeli", icon:"📖", category:"Üretken Yapay Zekâ", level:2,
+    definition:"Çok büyük metin örneklerinden öğrenerek yazı yazabilen, soru cevaplayabilen ve özet çıkarabilen yapay zekâ modelidir.",
+    example:"Bir sohbet asistanının masal yazması veya metin özetlemesi.",
+    activity:"Bir konu seç ve asistanın hangi sorulara cevap verebileceğini listele.",
+    warning:"Akıcı yazması her zaman doğru yazdığı anlamına gelmez."},
+  {term:"LLM", icon:"💬", category:"Üretken Yapay Zekâ", level:2,
+    definition:"Large Language Model ifadesinin kısaltmasıdır. Türkçesi Büyük Dil Modeli olarak düşünülebilir.",
+    example:"Metin üreten sohbet asistanları çoğu zaman LLM kullanır.",
+    activity:"LLM'ye sorulabilecek iyi ve kötü iki soru örneği yaz.",
+    warning:"LLM bazen uydurma bilgi üretebilir."},
+  {term:"Küçük Dil Modeli", icon:"🐣", category:"Üretken Yapay Zekâ", level:2,
+    definition:"Daha az kaynakla çalışabilen, belirli görevlerde kullanılan daha küçük dil modelidir.",
+    example:"Bir oyuncakta çevrimdışı çalışan basit konuşma asistanı.",
+    activity:"Küçük bir robotun sadece 5 komutu anladığını hayal et.",
+    warning:"Küçük modeller her konuda güçlü olmayabilir."},
+  {term:"Üretken Yapay Zekâ", icon:"🎨", category:"Üretken Yapay Zekâ", level:2,
+    definition:"Yeni metin, resim, müzik, video, kod veya fikir üretebilen yapay zekâ türüdür.",
+    example:"\"Uzay kütüphanesinde geçen bir hikâye yaz.\" dediğinde hikâye üretmesi.",
+    activity:"Bir masal konusu ver ve üretilen sonucu kendi cümlelerinle düzenle.",
+    warning:"Üretilen içerik gerçek olmayabilir; kaynak kontrolü gerekir."},
+  {term:"Prompt", icon:"📝", category:"Üretken Yapay Zekâ", level:1,
+    definition:"Yapay zekâya ne istediğimizi anlatan komut veya yönergedir.",
+    example:"\"8 yaşındaki çocuklar için yapay zekâyı anlatan kısa bir şiir yaz.\" bir prompttur.",
+    activity:"Açık, yaşa uygun ve amaç belirten bir prompt yaz.",
+    warning:"Belirsiz prompt, belirsiz cevap getirebilir."},
+  {term:"Prompt Mühendisliği", icon:"🛠️", category:"Üretken Yapay Zekâ", level:2,
+    definition:"Yapay zekâdan daha iyi cevap almak için yönergeyi açık, düzenli ve amaçlı yazma becerisidir.",
+    example:"\"Kısa yaz.\" yerine \"5 cümlede, 10 yaşındaki çocuklara uygun, örnekli yaz.\" demek.",
+    activity:"Kötü bir promptu daha açık hâle getir.",
+    warning:"İyi prompt, yine de cevabın yüzde yüz doğru olacağını garanti etmez."},
+  {term:"Token", icon:"🧱", category:"Üretken Yapay Zekâ", level:2,
+    definition:"Dil modellerinin metni küçük parçalara ayırarak işlediği birimdir. Kelime, kelime parçası veya noktalama olabilir.",
+    example:"\"Merhaba çocuklar!\" cümlesi birkaç tokena ayrılabilir.",
+    activity:"Bir cümleyi kelimelere böl; token fikrini basitçe canlandır.",
+    warning:"Çok uzun metinler daha fazla işlem gerektirir."},
+  {term:"Bağlam Penceresi", icon:"🪟", category:"Üretken Yapay Zekâ", level:2,
+    definition:"Yapay zekânın aynı anda okuyup dikkate alabildiği metin alanıdır.",
+    example:"Bir asistana çok uzun hikâye verirsen sadece sığan kısmı dikkate alabilir.",
+    activity:"Bir defter sayfasına sığan bilgiyi düşün; bağlam penceresi buna benzer.",
+    warning:"Bağlam dışında kalan bilgi cevapta unutulabilir."},
+  {term:"Halüsinasyon", icon:"🌫️", category:"Güvenlik ve Etik", level:2,
+    definition:"Yapay zekânın gerçekmiş gibi görünen ama yanlış veya uydurma bilgi üretmesidir.",
+    example:"Var olmayan bir kitabın adını kaynak gibi göstermesi.",
+    activity:"Bir cevaptaki tarih, isim ve kaynakları kontrol et.",
+    warning:"Akıcı ve kendinden emin cevaplar bile yanlış olabilir."},
+  {term:"Grounding", icon:"⚓", category:"Güncel Kavramlar", level:3,
+    definition:"Yapay zekâ cevabını güvenilir kaynaklara, belgelere veya gerçek verilere bağlama yöntemidir.",
+    example:"Asistanın cevap verirken kütüphane kataloğundaki gerçek kayıtlara dayanması.",
+    activity:"Bir bilgi için kitap, ansiklopedi ve güvenilir siteyle kontrol yap.",
+    warning:"Kaynağa bağlı cevaplar daha güvenilir olabilir ama yine de dikkat gerekir."},
+  {term:"RAG", icon:"📎", category:"Güncel Kavramlar", level:3,
+    definition:"Retrieval-Augmented Generation ifadesinin kısaltmasıdır. YZ'nin cevap üretmeden önce ilgili belgeleri bulup onlardan yararlanmasıdır.",
+    example:"Bir okul asistanının okul kurallarını önce belgede arayıp sonra cevaplaması.",
+    activity:"Bir soru sor, önce kaynak bul, sonra cevabı kaynağa göre yaz.",
+    warning:"Yanlış kaynak bulunursa cevap da yanlış olabilir."},
+  {term:"Embedding", icon:"🧲", category:"Güncel Kavramlar", level:3,
+    definition:"Metin, resim veya sesi sayılardan oluşan anlam haritasına dönüştürme yöntemidir.",
+    example:"\"Kedi\" ve \"miyav\" kelimeleri anlamca yakın olduğu için haritada yakın durabilir.",
+    activity:"Benzer kelimeleri yan yana, ilgisiz kelimeleri uzak yaz.",
+    warning:"Embedding anlamı yakalamaya çalışır ama her zaman insan gibi anlamaz."},
+  {term:"Vektör Veri Tabanı", icon:"🗄️", category:"Güncel Kavramlar", level:3,
+    definition:"Embedding adı verilen sayı haritalarını saklayan ve benzer bilgileri hızlı bulmaya yarayan veri tabanıdır.",
+    example:"Kütüphane asistanının benzer konudaki kitapları bulması.",
+    activity:"Benzer kitapları aynı rafa koyduğunu düşün; vektör veri tabanı benzerleri yakın tutar.",
+    warning:"Veri yanlış yerleştirilirse arama sonucu zayıflar."},
+  {term:"Semantik Arama", icon:"🔎", category:"Güncel Kavramlar", level:2,
+    definition:"Sadece aynı kelimeyi değil, anlam olarak benzer bilgileri de aramaktır.",
+    example:"\"Uzay yolculuğu\" arayınca \"astronot\" ve \"roket\" sonuçlarının da gelmesi.",
+    activity:"\"Kitap\" kelimesine anlamca yakın 5 kelime bul.",
+    warning:"Bazen fazla geniş sonuç getirebilir."},
+  {term:"Ajan", icon:"🧑‍🚀", category:"Ajanlar ve Araçlar", level:3,
+    definition:"Hedefe ulaşmak için plan yapan, araç kullanabilen ve birkaç adımı takip edebilen yapay zekâ uygulamasıdır.",
+    example:"\"Bana hafta sonu için gezi planı yap.\" deyince takvim, harita ve hava durumunu birlikte kullanması.",
+    activity:"Bir görev seç: araştır, planla, kontrol et, sonucu sun adımlarını yaz.",
+    warning:"Ajanların yaptığı işlemler sınırlandırılmalı ve kontrol edilmelidir."},
+  {term:"Araç Kullanımı", icon:"🧰", category:"Ajanlar ve Araçlar", level:3,
+    definition:"Yapay zekânın hesap makinesi, arama motoru, dosya okuyucu veya takvim gibi araçlardan yararlanmasıdır.",
+    example:"Matematik sorusunu çözmek için hesap makinesi aracını çağırması.",
+    activity:"Bir asistanın hangi araçlara ihtiyaç duyacağını listele.",
+    warning:"Araçlar yanlış kullanılırsa hatalı işlem yapılabilir."},
+  {term:"Function Calling", icon:"🔌", category:"Ajanlar ve Araçlar", level:3,
+    definition:"Yapay zekânın belirli bir işi yapmak için önceden tanımlanmış bir fonksiyonu çağırmasıdır.",
+    example:"\"Hava nasıl?\" sorusunda hava durumu fonksiyonunu çalıştırması.",
+    activity:"Bir robot için üç fonksiyon düşün: ışığı aç, saati söyle, not al.",
+    warning:"Fonksiyonların ne yapabileceği açıkça sınırlandırılmalıdır."},
+  {term:"MCP", icon:"🧷", category:"Ajanlar ve Araçlar", level:3,
+    definition:"Model Context Protocol ifadesinin kısaltmasıdır. YZ uygulamalarının farklı araçlara ve veri kaynaklarına standart şekilde bağlanmasına yardım eden açık bir bağlantı düzenidir.",
+    example:"Bir asistanın dosyalar, veri tabanı ve görev araçlarıyla aynı kurala göre konuşabilmesi.",
+    activity:"USB girişini düşün: farklı cihazları aynı bağlantı mantığıyla bağlamaya benzer.",
+    warning:"Bağlantı verilen araçların güvenli olması çok önemlidir."},
+  {term:"Çoklu Ajan Sistemi", icon:"👥", category:"Ajanlar ve Araçlar", level:3,
+    definition:"Birden fazla yapay zekâ ajanının farklı görevleri paylaşarak birlikte çalışmasıdır.",
+    example:"Biri araştırır, biri özetler, biri hataları kontrol eder.",
+    activity:"Bir proje için üç rol belirle: araştırmacı, tasarımcı, kontrolcü.",
+    warning:"Ajanlar birbirini yanlış yönlendirebilir; denetim gerekir."},
+  {term:"Bellek", icon:"🧠", category:"Ajanlar ve Araçlar", level:2,
+    definition:"Bir sistemin önceki bilgileri veya tercihleri hatırlamasıdır.",
+    example:"Bir okuma uygulamasının sevdiğin kitap türlerini hatırlaması.",
+    activity:"Bir asistanın seni daha iyi anlaması için hangi bilgileri hatırlaması gerektiğini düşün.",
+    warning:"Kişisel bilgilerin saklanması gizlilik açısından dikkat ister."},
+  {term:"Multimodal Yapay Zekâ", icon:"🎧", category:"Güncel Kavramlar", level:2,
+    definition:"Metin, resim, ses veya video gibi farklı türde bilgileri birlikte anlayabilen yapay zekâdır.",
+    example:"Bir fotoğrafa bakıp içindeki nesneleri anlatması ve sesli cevap vermesi.",
+    activity:"Bir resmi seç; hem yazıyla hem sesle nasıl anlatılacağını düşün.",
+    warning:"Görsel veya ses yorumları hatalı olabilir."},
+  {term:"Görsel Tanıma", icon:"🖼️", category:"Görsel ve Ses", level:1,
+    definition:"Yapay zekânın resimlerdeki nesneleri, renkleri veya şekilleri anlamaya çalışmasıdır.",
+    example:"Kameranın elmayı tanıması.",
+    activity:"Bir resimde gördüğün 5 nesneyi listele.",
+    warning:"Işık azsa veya görüntü bulanıksa sistem yanılabilir."},
+  {term:"Bilgisayarlı Görü", icon:"👁️", category:"Görsel ve Ses", level:2,
+    definition:"Bilgisayarların görüntüleri ve videoları anlamaya çalıştığı yapay zekâ alanıdır.",
+    example:"Otonom aracın yoldaki tabelayı tanıması.",
+    activity:"Bir sokak fotoğrafında trafik işaretlerini bulmaya çalış.",
+    warning:"Gerçek dünyada hata yapmak tehlikeli olabilir."},
+  {term:"Nesne Algılama", icon:"🎯", category:"Görsel ve Ses", level:2,
+    definition:"Bir görüntüde hangi nesnelerin nerede olduğunu bulma işidir.",
+    example:"Fotoğrafta topun, kedinin ve masanın yerini kutucukla göstermesi.",
+    activity:"Bir resimde nesnelerin etrafına hayali kutular çiz.",
+    warning:"Benzer nesneler karıştırılabilir."},
+  {term:"Yüz Tanıma", icon:"🙂", category:"Görsel ve Ses", level:2,
+    definition:"Bir kişinin yüz özelliklerinden kim olduğunu anlamaya çalışan sistemdir.",
+    example:"Telefonun yüzünü tanıyıp kilidi açması.",
+    activity:"Yüz tanımanın nerelerde kullanılabileceğini ve nerelerde sakıncalı olabileceğini tartış.",
+    warning:"Gizlilik ve izin çok önemlidir."},
+  {term:"Ses Tanıma", icon:"🎙️", category:"Görsel ve Ses", level:1,
+    definition:"Yapay zekânın konuşmayı yazıya veya komuta dönüştürmesidir.",
+    example:"\"Alarm kur.\" dediğinde telefonun alarm kurması.",
+    activity:"Bir sesli asistanın anlayabileceği 5 komut yaz.",
+    warning:"Gürültülü ortamda yanlış anlayabilir."},
+  {term:"Doğal Dil İşleme", icon:"🗣️", category:"Üretken Yapay Zekâ", level:2,
+    definition:"Yapay zekânın insan dilini anlamaya, özetlemeye, çevirmeye veya üretmeye çalıştığı alandır.",
+    example:"Uzun bir metni kısa özet hâline getirmesi.",
+    activity:"Bir paragrafı 2 cümlede özetle.",
+    warning:"Dil anlamı kültüre ve bağlama göre değişebilir."},
+  {term:"Metinden Görsele", icon:"🖌️", category:"Üretken Yapay Zekâ", level:2,
+    definition:"Yazdığın açıklamaya göre görsel üreten yapay zekâ yöntemidir.",
+    example:"\"Ay ışığında sihirli kütüphane\" yazınca buna uygun görsel üretmesi.",
+    activity:"Bir görsel promptu yaz: karakter, mekân, renk, tarz belirt.",
+    warning:"Başkalarının eserlerini izinsiz kopyalamamak gerekir."},
+  {term:"Difüzyon Modeli", icon:"🌌", category:"Üretken Yapay Zekâ", level:3,
+    definition:"Görüntü üretirken gürültüden başlayıp adım adım anlamlı görsel oluşturan model türüdür.",
+    example:"Karmaşık noktaların zamanla bir ejderha resmine dönüşmesi.",
+    activity:"Karalanmış bir şekilden yavaş yavaş resim çıkardığını hayal et.",
+    warning:"Gerçek gibi görünen ama gerçek olmayan görseller üretebilir."},
+  {term:"Sentetik Veri", icon:"🧪", category:"Veri ve Öğrenme", level:2,
+    definition:"Gerçek veriye benzer şekilde yapay olarak oluşturulmuş veridir.",
+    example:"Gerçek çocuk fotoğrafı kullanmadan çizim karakter yüzleri üretmek.",
+    activity:"Gerçek isimler yerine uydurma öğrenci isimleriyle örnek tablo yap.",
+    warning:"Sentetik veri de yanlılık taşıyabilir."},
+  {term:"Veri Gizliliği", icon:"🔐", category:"Güvenlik ve Etik", level:1,
+    definition:"Kişisel bilgilerin izinsiz paylaşılmaması ve korunmasıdır.",
+    example:"Adresini, okulunu veya telefon numaranı herkese açık yazmamak.",
+    activity:"Paylaşılmaması gereken 5 kişisel veri örneği yaz.",
+    warning:"Çocuklar kişisel bilgilerini yalnızca güvenilir yetişkinlerle paylaşmalıdır."},
+  {term:"Kişisel Veri", icon:"🪪", category:"Güvenlik ve Etik", level:1,
+    definition:"Seni tanımaya yarayan özel bilgilerdir.",
+    example:"Ad, soyad, fotoğraf, okul, adres, konum, telefon numarası.",
+    activity:"Bir bilginin kişisel veri olup olmadığını sınıfça tartış.",
+    warning:"Kişisel veriler internette kalıcı iz bırakabilir."},
+  {term:"Dijital İz", icon:"👣", category:"Güvenlik ve Etik", level:1,
+    definition:"İnternette yaptığımız işlemlerden geriye kalan izlerdir.",
+    example:"Beğeniler, yorumlar, aramalar, paylaşımlar.",
+    activity:"Bugün internette yaptığın 3 şeyi düşün; hangileri dijital iz bırakır?",
+    warning:"Dijital izler uzun süre kalabilir."},
+  {term:"Yanlılık", icon:"⚖️", category:"Güvenlik ve Etik", level:2,
+    definition:"Yapay zekânın eksik, dengesiz veya haksız veriler yüzünden adil olmayan sonuçlar vermesidir.",
+    example:"Sadece kırmızı elma görmüş bir modelin yeşil elmayı tanıyamaması.",
+    activity:"Bir veri setinde her gruptan yeterince örnek var mı kontrol et.",
+    warning:"Yanlı sistemler insanlara haksızlık yapabilir."},
+  {term:"Adil Yapay Zekâ", icon:"🤝", category:"Güvenlik ve Etik", level:2,
+    definition:"Farklı insanlara ve durumlara karşı dengeli, ayrımcı olmayan sonuçlar üretmeye çalışan yapay zekâ yaklaşımıdır.",
+    example:"Bir eğitim uygulamasının her öğrenciyi sadece ismine göre değil, gerçek ihtiyacına göre desteklemesi.",
+    activity:"Adil bir oyun kuralı nasıl olur, 3 madde yaz.",
+    warning:"Adalet için hem veri hem tasarım hem de insan denetimi gerekir."},
+  {term:"Şeffaflık", icon:"🔦", category:"Güvenlik ve Etik", level:2,
+    definition:"Bir yapay zekâ sisteminin ne yaptığı ve nasıl kullanıldığı hakkında açık bilgi verilmesidir.",
+    example:"\"Bu öneri önceki okuma geçmişine göre üretildi.\" açıklaması.",
+    activity:"Bir uygulamanın sana neden öneri verdiğini açıklamasını iste.",
+    warning:"Her sistem tamamen anlaşılır olmayabilir."},
+  {term:"Açıklanabilir Yapay Zekâ", icon:"🪟", category:"Güvenlik ve Etik", level:3,
+    definition:"Yapay zekânın verdiği kararı insanların anlayabileceği şekilde açıklamaya çalışmasıdır.",
+    example:"\"Bu kitabı önerdim çünkü daha önce bilim kurgu okudun.\" demesi.",
+    activity:"Bir önerinin neden yapıldığını 2 nedenle açıkla.",
+    warning:"Açıklama her zaman modelin tüm iç işleyişini göstermez."},
+  {term:"Sorumlu Yapay Zekâ", icon:"🌱", category:"Güvenlik ve Etik", level:2,
+    definition:"Yapay zekâyı güvenli, adil, yararlı, gizliliğe saygılı ve insan kontrolünde geliştirme anlayışıdır.",
+    example:"Çocuklara uygun olmayan içerikleri engelleyen ve kaynak kontrolü isteyen eğitim aracı.",
+    activity:"Sorumlu bir YZ için 4 kural yaz.",
+    warning:"Sadece hızlı olmak yetmez; güvenli ve doğru olmak da gerekir."},
+  {term:"Etik", icon:"🧭", category:"Güvenlik ve Etik", level:1,
+    definition:"Doğru, adil ve sorumlu davranma kurallarıdır.",
+    example:"Başkasının fotoğrafını izinsiz kullanmamak.",
+    activity:"YZ ile yapılması doğru ve yanlış olan 3 davranış yaz.",
+    warning:"Yapabiliyor olmak, yapmanın doğru olduğu anlamına gelmez."},
+  {term:"Guardrail", icon:"🚧", category:"Güvenlik ve Etik", level:3,
+    definition:"Yapay zekânın tehlikeli, uygunsuz veya hatalı davranmasını azaltmak için konulan güvenlik sınırlarıdır.",
+    example:"Bir çocuk asistanının kişisel adres istememesi.",
+    activity:"Bir eğitim robotu için 5 güvenlik kuralı belirle.",
+    warning:"Guardrail yardımcıdır ama tek başına yeterli değildir."},
+  {term:"İçerik Filtresi", icon:"🧹", category:"Güvenlik ve Etik", level:2,
+    definition:"Uygunsuz, zararlı veya yaşa uygun olmayan içerikleri ayıklamaya çalışan sistemdir.",
+    example:"Çocuk uygulamasının şiddet içeren görselleri engellemesi.",
+    activity:"Çocuklara uygun içerik için 3 ölçüt yaz.",
+    warning:"Filtreler bazen uygun içeriği de yanlışlıkla engelleyebilir."},
+  {term:"Kaynak Kontrolü", icon:"📌", category:"Güvenlik ve Etik", level:1,
+    definition:"Bir bilginin doğru olup olmadığını güvenilir kaynaklardan kontrol etmektir.",
+    example:"YZ'nin verdiği tarihi ansiklopedi, kitap veya resmi kaynakla karşılaştırmak.",
+    activity:"Bir bilgi için en az iki farklı kaynak bul.",
+    warning:"Tek kaynağa dayanmak riskli olabilir."},
+  {term:"Deepfake", icon:"🎭", category:"Güvenlik ve Etik", level:2,
+    definition:"Bir kişinin görüntüsünü veya sesini yapay zekâ ile değiştirerek gerçekmiş gibi gösteren içeriktir.",
+    example:"Birinin söylemediği sözü söylemiş gibi gösteren sahte video.",
+    activity:"Bir videonun gerçekliğini anlamak için hangi ipuçlarına bakarsın?",
+    warning:"Deepfake insanları kandırmak için kullanılabilir."},
+  {term:"Sahte Görsel", icon:"🖼️", category:"Güvenlik ve Etik", level:1,
+    definition:"Gerçek gibi görünen ama yapay zekâ ile üretilmiş veya değiştirilmiş görseldir.",
+    example:"Hiç yaşanmamış bir olayın fotoğrafı gibi sunulan görsel.",
+    activity:"Bir görselde ışık, gölge, eller ve yazılar tutarlı mı kontrol et.",
+    warning:"Görmek her zaman inanmak anlamına gelmez."},
+  {term:"Watermark", icon:"💧", category:"Güvenlik ve Etik", level:3,
+    definition:"Bir içeriğin yapay zekâ ile üretildiğini göstermek için eklenen görünür veya gizli işaret olabilir.",
+    example:"Bir görselin köşesinde \"AI generated\" yazması.",
+    activity:"Bir posterde içerik kaynağını belirten küçük işaret tasarla.",
+    warning:"Watermark silinebilir veya her zaman fark edilmeyebilir."},
+  {term:"Model Kartı", icon:"🪧", category:"Güvenlik ve Etik", level:3,
+    definition:"Bir yapay zekâ modelinin ne için geliştirildiğini, güçlü ve zayıf yönlerini, risklerini anlatan bilgi kartıdır.",
+    example:"Bir model kartında modelin hangi dilleri daha iyi bildiği yazabilir.",
+    activity:"Hayali bir kütüphane robotu için model kartı hazırla.",
+    warning:"Model kartı okumadan sistemi kullanmak riskleri görmemize engel olabilir."},
+  {term:"Değerlendirme", icon:"✅", category:"Makine Öğrenmesi", level:2,
+    definition:"Bir yapay zekâ sisteminin ne kadar doğru, güvenli veya yararlı çalıştığını ölçme sürecidir.",
+    example:"100 sorudan kaçına doğru cevap verdiğini kontrol etmek.",
+    activity:"Bir quiz hazırla ve cevapların doğruluk oranını hesapla.",
+    warning:"Tek bir test tüm sistemi ölçmeye yetmeyebilir."},
+  {term:"Doğruluk", icon:"🎯", category:"Makine Öğrenmesi", level:2,
+    definition:"Yapay zekânın verdiği cevapların ne kadarının doğru olduğunu gösteren ölçüdür.",
+    example:"10 resmin 8'ini doğru tanıdıysa doğruluk yüksek olabilir.",
+    activity:"Bir sınıflandırma oyununda kaç doğru yaptığını say.",
+    warning:"Doğruluk tek başına adalet veya güvenlik anlamına gelmez."},
+  {term:"Aşırı Öğrenme", icon:"🧷", category:"Makine Öğrenmesi", level:3,
+    definition:"Modelin eğitim örneklerini ezberleyip yeni örneklerde zorlanmasıdır.",
+    example:"Sadece aynı matematik sorularını ezberleyen öğrencinin farklı soruda zorlanması.",
+    activity:"Ezber ve anlama arasındaki farkı bir örnekle açıkla.",
+    warning:"Ezberleyen model gerçek hayatta zayıf çalışabilir."},
+  {term:"Genelleme", icon:"🌉", category:"Makine Öğrenmesi", level:2,
+    definition:"Modelin öğrendiklerini daha önce görmediği yeni örneklere uygulayabilmesidir.",
+    example:"Sadece kırmızı değil, yeşil elmayı da elma olarak tanıması.",
+    activity:"Farklı renklerde aynı nesneyi tanımaya çalış.",
+    warning:"Genelleme iyi değilse model yeni durumlarda hata yapar."},
+  {term:"İnce Ayar", icon:"🎚️", category:"Güncel Kavramlar", level:3,
+    definition:"Önceden eğitilmiş bir modeli belirli bir görev veya alan için ek örneklerle geliştirmedir.",
+    example:"Genel dil modelini çocuk kitapları önerme konusunda daha iyi hâle getirmek.",
+    activity:"Bir öğrenci genel okumayı biliyorsa, onu şiir okuma konusunda özel çalıştırmayı düşün.",
+    warning:"Kötü veriyle ince ayar yapmak modeli bozabilir."},
+  {term:"Transfer Öğrenme", icon:"🔁", category:"Makine Öğrenmesi", level:3,
+    definition:"Bir görevde öğrenilen bilginin benzer başka bir görevde kullanılmasıdır.",
+    example:"Kedileri tanımayı öğrenen modelin kaplanları tanımada daha hızlı öğrenmesi.",
+    activity:"Bisiklet sürmeyi bilen birinin scooter öğrenmesini düşün.",
+    warning:"Her bilgi her göreve doğrudan aktarılamaz."},
+  {term:"Özerk Sistem", icon:"🚗", category:"Ajanlar ve Araçlar", level:2,
+    definition:"Bazı kararları insan komutu beklemeden kendi verebilen sistemdir.",
+    example:"Robot süpürgenin odayı tarayıp yolunu seçmesi.",
+    activity:"Bir robot süpürge hangi durumlarda durmalı, listele.",
+    warning:"Özerk sistemlerde güvenlik kuralları çok önemlidir."},
+  {term:"Robot", icon:"🤖", category:"Temel Kavramlar", level:1,
+    definition:"Sensörler, motorlar ve yazılımlarla çevresiyle etkileşime girebilen makinedir.",
+    example:"Robot süpürge veya eğitim robotu.",
+    activity:"Bir robotun görmesi, duyması ve hareket etmesi için neler gerekir?",
+    warning:"Her robot yapay zekâ kullanmaz; bazıları sadece komut izler."},
+  {term:"Sensör", icon:"📡", category:"Temel Kavramlar", level:1,
+    definition:"Bir makinenin çevresini algılamasına yardım eden parçadır.",
+    example:"Kamera, mikrofon, ışık sensörü, sıcaklık sensörü.",
+    activity:"Evinde sensör kullanan 3 cihaz bul.",
+    warning:"Sensör hatalı ölçerse sistem yanlış karar verebilir."},
+  {term:"Otonom Araç", icon:"🚙", category:"Görsel ve Ses", level:2,
+    definition:"Yolu, işaretleri ve çevresini algılayarak kendi kendine hareket etmeye çalışan araçtır.",
+    example:"Kendi kendine park edebilen veya şerit takip eden araçlar.",
+    activity:"Bir aracın güvenli sürüş için neleri görmesi gerektiğini yaz.",
+    warning:"Gerçek trafikte hata ciddi sonuç doğurabilir."},
+  {term:"Öneri Sistemi", icon:"🎁", category:"Makine Öğrenmesi", level:1,
+    definition:"Geçmiş tercihlere veya benzerliklere göre yeni içerik, ürün veya kitap öneren sistemdir.",
+    example:"\"Bu kitabı sevdiysen bunu da sevebilirsin.\" önerisi.",
+    activity:"Bir arkadaşına sevdiği 3 kitaba göre yeni kitap öner.",
+    warning:"Sürekli aynı tür öneriler keşfi azaltabilir."},
+  {term:"Kişiselleştirme", icon:"🧑", category:"Makine Öğrenmesi", level:2,
+    definition:"Bir sistemin kullanıcıya göre farklı deneyim sunmasıdır.",
+    example:"Okuma seviyene uygun metinler göstermesi.",
+    activity:"Bir eğitim uygulaması seni daha iyi desteklemek için neleri bilmeli?",
+    warning:"Kişiselleştirme için veri toplanıyorsa gizlilik önemlidir."},
+  {term:"Chatbot", icon:"💬", category:"Üretken Yapay Zekâ", level:1,
+    definition:"İnsanlarla yazışarak veya konuşarak cevap veren dijital asistandır.",
+    example:"Kütüphane saatlerini sorunca cevap veren sanal görevli.",
+    activity:"Bir kütüphane chatbotuna sorulacak 5 soru yaz.",
+    warning:"Chatbot her zaman uzman veya öğretmen yerine geçmez."},
+  {term:"Sanal Asistan", icon:"🧞", category:"Ajanlar ve Araçlar", level:1,
+    definition:"Kullanıcıya soru cevaplama, hatırlatma, öneri veya görev yapma konusunda yardım eden yazılımdır.",
+    example:"Hatırlatıcı kuran veya takvim planlayan asistan.",
+    activity:"Sanal asistanın okul hayatında yapabileceği 3 yararlı işi yaz.",
+    warning:"Özel bilgileri paylaşmadan kullanmak gerekir."},
+  {term:"Akıllı Arama", icon:"🔍", category:"Güncel Kavramlar", level:1,
+    definition:"Aradığın kelimeyi ve niyetini daha iyi anlayarak sonuç getiren arama yöntemidir.",
+    example:"\"Çocuklar için uzay kitabı\" aramasında yaşa uygun kitapları bulması.",
+    activity:"Aynı konuyu kısa ve uzun iki arama cümlesiyle dene.",
+    warning:"Arama sonuçları her zaman en doğru bilgi değildir."},
+  {term:"Anomali Tespiti", icon:"🚨", category:"Makine Öğrenmesi", level:3,
+    definition:"Normalden farklı veya beklenmeyen durumları bulma işidir.",
+    example:"Kütüphane girişinde normalden çok daha fazla hareket olmasını fark etmek.",
+    activity:"Bir sayı dizisinde garip duran sayıyı bul: 2, 3, 4, 100, 5.",
+    warning:"Her farklılık tehlike değildir; yanlış alarm olabilir."},
+  {term:"Dijital İkiz", icon:"🪞", category:"Güncel Kavramlar", level:3,
+    definition:"Gerçek bir nesne, bina veya sistemin dijital ortamda oluşturulmuş modelidir.",
+    example:"Bir kütüphanenin bilgisayarda simülasyonunun yapılması.",
+    activity:"Sınıfının basit dijital haritasını kâğıda çiz.",
+    warning:"Dijital ikiz gerçek dünyayı tam olarak yansıtmayabilir."},
+  {term:"Simülasyon", icon:"🎲", category:"Temel Kavramlar", level:1,
+    definition:"Gerçek bir durumu güvenli şekilde denemek için yapılan canlandırmadır.",
+    example:"Uçak pilotlarının önce simülatörde eğitim alması.",
+    activity:"Kütüphane ödünç verme sürecini oyun gibi canlandır.",
+    warning:"Simülasyon gerçek hayatın tüm ayrıntılarını içermez."},
+  {term:"Siber Güvenlik", icon:"🛡️", category:"Güvenlik ve Etik", level:2,
+    definition:"Bilgisayarları, hesapları ve verileri dijital tehlikelerden koruma alanıdır.",
+    example:"Güçlü parola kullanmak ve şüpheli bağlantılara tıklamamak.",
+    activity:"Güçlü parola için 4 kural yaz.",
+    warning:"YZ sistemleri de saldırıya uğrayabilir."},
+  {term:"Prompt Injection", icon:"🧨", category:"Güvenlik ve Etik", level:3,
+    definition:"Bir kişinin yapay zekâyı kandırmak için gizli veya kötü niyetli komutlar yazmasıdır.",
+    example:"Bir metnin içine \"önceki kuralları unut\" gibi gizli komutlar yerleştirmek.",
+    activity:"Güvenli bir asistanın hangi komutları reddetmesi gerektiğini düşün.",
+    warning:"Araç kullanan ajanlarda daha tehlikeli olabilir."},
+  {term:"Veri Zehirleme", icon:"☠️", category:"Güvenlik ve Etik", level:3,
+    definition:"Yapay zekânın eğitim verisine bilerek yanlış veya zararlı örnekler karıştırılmasıdır.",
+    example:"Elma fotoğraflarını yanlışlıkla \"araba\" diye etiketlemek ve modeli şaşırtmak.",
+    activity:"Yanlış etiketli 3 örneğin sistemi nasıl bozacağını tartış.",
+    warning:"Güvenilir veri kaynağı çok önemlidir."},
+  {term:"Açık Kaynak Model", icon:"🌐", category:"Güncel Kavramlar", level:2,
+    definition:"Kodları, ağırlıkları veya kullanım bilgileri toplumla açıkça paylaşılabilen model türüdür.",
+    example:"Araştırmacıların indirip deneyebildiği bir dil modeli.",
+    activity:"Açık paylaşımın faydalarını ve risklerini iki sütunda yaz.",
+    warning:"Açık kaynak olmak her zaman güvenli veya doğru olmak demek değildir."},
+  {term:"Kapalı Model", icon:"🔒", category:"Güncel Kavramlar", level:2,
+    definition:"İç ayrıntıları herkesle paylaşılmayan, genellikle bir kurum tarafından hizmet olarak sunulan modeldir.",
+    example:"Sadece uygulama üzerinden kullanılan bir sohbet modeli.",
+    activity:"Kapalı ve açık model arasındaki farkı kitaplık örneğiyle açıkla.",
+    warning:"Nasıl eğitildiğini tam bilmek zor olabilir."},
+  {term:"Model Ağırlıkları", icon:"⚙️", category:"Makine Öğrenmesi", level:3,
+    definition:"Modelin öğrendiği bilgileri temsil eden çok sayıda sayısal değerdir.",
+    example:"Bir tarifin gizli ayarları gibi; hangi ipucuna ne kadar önem vereceğini belirler.",
+    activity:"Bir karar verirken renk, şekil ve boyuta farklı önem puanları ver.",
+    warning:"Ağırlıkları doğrudan okumak insanlar için kolay değildir."},
+  {term:"Karar Ağacı", icon:"🌳", category:"Makine Öğrenmesi", level:2,
+    definition:"Sorular sorarak dallara ayrılan ve sonunda karar veren model türüdür.",
+    example:"\"Kanatları var mı? Uçuyor mu? Öyleyse kuş olabilir.\"",
+    activity:"Bir hayvan tahmin oyunu için evet-hayır ağacı kur.",
+    warning:"Çok karmaşık konularda tek başına yetersiz kalabilir."},
+  {term:"Kümeleme", icon:"🫧", category:"Makine Öğrenmesi", level:2,
+    definition:"Benzer verileri aynı gruba toplama yöntemidir.",
+    example:"Benzer kitap kapaklarını veya benzer müzikleri gruplamak.",
+    activity:"Kalemleri renk veya boylarına göre kümelere ayır.",
+    warning:"Kümelerin anlamını insan yorumlamalıdır."},
+  {term:"Regresyon", icon:"📈", category:"Makine Öğrenmesi", level:3,
+    definition:"Sayısal bir değeri tahmin etmeye çalışan yöntemdir.",
+    example:"Yarınki sıcaklığı veya bir yolculuğun süresini tahmin etmek.",
+    activity:"Son üç günün sıcaklığına bakıp yarını tahmin et.",
+    warning:"Geçmiş eğilim geleceği kesin göstermez."},
+  {term:"Yapay Genel Zekâ", icon:"🧠", category:"Güncel Kavramlar", level:3,
+    definition:"İnsanlar gibi çok geniş alanlarda esnek biçimde öğrenip problem çözebilen varsayımsal yapay zekâ düzeyidir.",
+    example:"Hem doktor gibi teşhis yapan, hem öğretmen gibi anlatan, hem mühendis gibi tasarlayan tek sistem fikri.",
+    activity:"Bir sistemin gerçekten genel zekâ sayılması için neleri yapması gerektiğini tartış.",
+    warning:"Bugünkü sistemleri abartmadan, gerçek yetenekleriyle değerlendirmek gerekir."},
+  {term:"Dar Yapay Zekâ", icon:"🎯", category:"Temel Kavramlar", level:1,
+    definition:"Belirli bir görevde iyi çalışan yapay zekâdır.",
+    example:"Sadece satranç oynayan veya sadece yüz tanıyan sistem.",
+    activity:"Tek görev yapan 3 akıllı sistem örneği bul.",
+    warning:"Bir görevde iyi olması her şeyi bildiği anlamına gelmez."},
+  {term:"İnsan Denetimi", icon:"👨‍🏫", category:"Güvenlik ve Etik", level:1,
+    definition:"Yapay zekânın önemli kararlarında insanların kontrol ve sorumluluk almasıdır.",
+    example:"Bir öğretmenin YZ'nin önerdiği notu kontrol etmesi.",
+    activity:"Hangi kararları sadece yapay zekâya bırakmamalıyız?",
+    warning:"Önemli kararlarda son sorumluluk insanda olmalıdır."},
+  {term:"Yaş Uygunluğu", icon:"🧒", category:"Güvenlik ve Etik", level:1,
+    definition:"İçeriğin çocuğun yaşına, gelişimine ve güvenliğine uygun olmasıdır.",
+    example:"8 yaşındaki çocuk için sade dil ve güvenli örnekler kullanmak.",
+    activity:"Bir metni küçük yaşa uygun hâle getirmek için 3 değişiklik yap.",
+    warning:"Her içerik her yaş için uygun değildir."},
+  {term:"Telif Hakkı", icon:"©️", category:"Güvenlik ve Etik", level:2,
+    definition:"Bir eseri yapan kişinin haklarını koruyan kuraldır.",
+    example:"Başkasının çizimini izin almadan kendi çalışman gibi paylaşmamak.",
+    activity:"Bir görsel kullanırken kaynak belirtmenin neden önemli olduğunu konuş.",
+    warning:"YZ üretse bile başkalarının eserlerine saygı gerekir."},
+  {term:"Lisans", icon:"📜", category:"Güvenlik ve Etik", level:2,
+    definition:"Bir içeriğin, yazılımın veya görselin nasıl kullanılabileceğini söyleyen izin belgesidir.",
+    example:"Bazı görseller eğitimde serbest kullanılabilir, bazıları kullanılamaz.",
+    activity:"Bir görsel kullanmadan önce lisansını kontrol etme adımlarını yaz.",
+    warning:"İzin olmayan içeriği kullanmak sorun çıkarabilir."},
+  {term:"API", icon:"🔗", category:"Ajanlar ve Araçlar", level:2,
+    definition:"Farklı yazılımların birbirleriyle düzenli şekilde konuşmasını sağlayan bağlantı yöntemidir.",
+    example:"Hava durumu uygulamasının hava verilerini başka bir servisten alması.",
+    activity:"Bir restoranla kurye arasında bilgi taşıyan görevliyi API gibi düşün.",
+    warning:"API anahtarları ve erişimler güvenli saklanmalıdır."},
+  {term:"Bulut Bilişim", icon:"☁️", category:"Ajanlar ve Araçlar", level:1,
+    definition:"Bilgisayar işlemlerinin veya verilerin internet üzerindeki güçlü sunucularda çalışmasıdır.",
+    example:"Fotoğrafların sadece telefonunda değil, çevrimiçi depoda da bulunması.",
+    activity:"Bulutta çalışan 3 uygulama örneği yaz.",
+    warning:"İnternet ve gizlilik ayarları önemlidir."},
+  {term:"Yerel Model", icon:"🏠", category:"Güncel Kavramlar", level:2,
+    definition:"İnternete gerek kalmadan kendi cihazında çalışan yapay zekâ modelidir.",
+    example:"Bilgisayarında çevrimdışı çalışan küçük bir metin modeli.",
+    activity:"Yerel çalışmanın gizlilik açısından faydasını tartış.",
+    warning:"Cihaz gücü yeterli değilse yavaş çalışabilir."},
+  {term:"Kenar Yapay Zekâ", icon:"📱", category:"Güncel Kavramlar", level:3,
+    definition:"Yapay zekânın uzak sunucu yerine telefon, kamera veya küçük cihaz üzerinde çalışmasıdır.",
+    example:"Telefonun fotoğrafları cihazın içinde düzenlemesi.",
+    activity:"İnternet olmadan çalışması gereken 3 akıllı özellik düşün.",
+    warning:"Küçük cihazlarda kapasite sınırlı olabilir."},
+  {term:"Karbon Ayak İzi", icon:"🌍", category:"Güvenlik ve Etik", level:2,
+    definition:"Bir teknolojinin enerji kullanımı nedeniyle çevreye bıraktığı etkiyi anlatır.",
+    example:"Büyük modellerin eğitimi çok elektrik harcayabilir.",
+    activity:"Daha az enerji kullanan teknoloji alışkanlıkları yaz.",
+    warning:"Yapay zekâ geliştirilirken çevresel etki de düşünülmelidir."},
+  {term:"İnsan-YZ İş Birliği", icon:"🤝", category:"Temel Kavramlar", level:1,
+    definition:"İnsanların ve yapay zekânın birlikte çalışarak daha iyi sonuç üretmesidir.",
+    example:"Öğrencinin fikri bulması, YZ'nin taslak hazırlaması, öğrencinin kontrol edip düzeltmesi.",
+    activity:"Bir projede insanın ve YZ'nin görevlerini ayrı ayrı yaz.",
+    warning:"YZ yardımcıdır; düşünme ve sorumluluk insanda kalmalıdır."}
+];
+
+/* ============= ENRICHED TERM DATA — appended without rewriting existing TERMS ============= */
+TERMS.push(...[
+  {
+    "term":"Yapay Zekâ Okuryazarlığı",
+    "icon":"📘",
+    "category":"Güncel Kavramlar",
+    "level":1,
+    "definition":"Yapay zekânın ne yapabildiğini, nerede hata yapabileceğini ve onu güvenli, etik, bilinçli kullanmayı öğrenme becerisidir.",
+    "example":"Bir sohbet robotundan ödev fikri alıp cevabı kaynaklarla kontrol etmek.",
+    "activity":"Bir YZ cevabını üç gözle incele: doğru mu, adil mi, yaşına uygun mu?",
+    "warning":"YZ okuryazarlığı sadece araç kullanmak değil; sorgulamak, doğrulamak ve sorumluluk almaktır."
+  },
+  {
+    "term":"Medya Okuryazarlığı",
+    "icon":"📰",
+    "category":"Güvenlik ve Etik",
+    "level":1,
+    "definition":"Gördüğümüz haber, video, görsel ve paylaşımları anlamak, kaynaklarını sorgulamak ve güvenilir olup olmadığını değerlendirmektir.",
+    "example":"Bir videonun gerçek mi, kurgu mu, reklam mı olduğunu anlamaya çalışmak.",
+    "activity":"Bir haber başlığını seç; kaynağı, tarihi ve başka kaynaklarda geçip geçmediğini kontrol et.",
+    "warning":"Duygularını hemen harekete geçiren içerikler özellikle dikkat ister."
+  },
+  {
+    "term":"Kaynak Kontrolü",
+    "icon":"🔍",
+    "category":"Güvenlik ve Etik",
+    "level":1,
+    "definition":"Bir bilginin doğru olup olmadığını güvenilir kitap, resmi kurum, ansiklopedi veya farklı kaynaklarla karşılaştırma işlemidir.",
+    "example":"YZ'nin verdiği tarihi bilgiyi kütüphane kitabı ve güvenilir kurum sitesiyle kontrol etmek.",
+    "activity":"Bir cevapta geçen kişi, tarih ve kurum adını üç farklı kaynakla doğrula.",
+    "warning":"Tek kaynakla yetinmek hata riskini artırır."
+  },
+  {
+    "term":"Güvenilir Kaynak",
+    "icon":"🏛️",
+    "category":"Güvenlik ve Etik",
+    "level":1,
+    "definition":"Bilgiyi açıkça kimin hazırladığını, ne zaman yayımladığını ve hangi kanıtlara dayandığını gösteren kaynaktır.",
+    "example":"UNICEF, UNESCO, OECD gibi kurumların çocuk ve eğitim üzerine yayımladığı rehberler.",
+    "activity":"Bir web sayfasında yazar, tarih, kurum ve kaynakça var mı bak.",
+    "warning":"Güzel görünen her site güvenilir olmayabilir."
+  },
+  {
+    "term":"Atıf",
+    "icon":"🔖",
+    "category":"Güvenlik ve Etik",
+    "level":1,
+    "definition":"Kullandığın bilginin, görselin veya fikrin nereden geldiğini dürüstçe göstermektir.",
+    "example":"Bir sunumun sonunda yararlandığın kitap ve web sayfalarını yazmak.",
+    "activity":"Bugün kullandığın bir bilgi için kısa kaynak notu hazırla: yazar/kurum, başlık, yıl.",
+    "warning":"Kaynak göstermeden başkasının emeğini kullanmak etik değildir."
+  },
+  {
+    "term":"Çocuk Hakları",
+    "icon":"🧒",
+    "category":"Güvenlik ve Etik",
+    "level":1,
+    "definition":"Çocukların güvenlik, gizlilik, katılım, eğitim, gelişim ve korunma gibi temel haklarını ifade eder.",
+    "example":"Bir YZ oyununun çocukların verisini gereksiz toplamaması ve yaşına uygun içerik sunması.",
+    "activity":"Bir uygulama çocuklar için güvenli mi? Veri, reklam, yaş uygunluğu ve yardım seçeneklerini kontrol et.",
+    "warning":"Çocuklar için tasarlanan YZ sistemlerinde güvenlik ve yüksek yarar öncelikli olmalıdır."
+  },
+  {
+    "term":"Rıza",
+    "icon":"✅",
+    "category":"Güvenlik ve Etik",
+    "level":1,
+    "definition":"Bir bilgi, fotoğraf veya ses kullanılmadan önce kişinin ya da gerekli durumlarda velinin açık izin vermesidir.",
+    "example":"Arkadaşının fotoğrafını YZ aracına yüklemeden önce izin istemek.",
+    "activity":"Bir içerik paylaşmadan önce “Bu kişinin izni var mı?” sorusunu sor.",
+    "warning":"İzin alınmadan kişisel veri paylaşmak doğru değildir."
+  },
+  {
+    "term":"Veri Minimizasyonu",
+    "icon":"🪶",
+    "category":"Veri ve Öğrenme",
+    "level":2,
+    "definition":"Bir sistemin sadece gerçekten gerekli olan en az kişisel veriyi toplaması ilkesidir.",
+    "example":"Bir kelime oyununun adresini değil, sadece takma adını istemesi.",
+    "activity":"Bir uygulamanın istediği izinleri listele; hangileri gerçekten gerekli?",
+    "warning":"Gereksiz veri toplamak gizlilik riskini artırır."
+  },
+  {
+    "term":"Çıktı Değerlendirme",
+    "icon":"🧐",
+    "category":"Temel Kavramlar",
+    "level":1,
+    "definition":"YZ'nin verdiği cevabı doğruluk, açıklık, kaynak, tarafsızlık ve yaş uygunluğu açısından incelemektir.",
+    "example":"Bir özetin konuyu doğru aktarıp aktarmadığını metnin aslıyla karşılaştırmak.",
+    "activity":"Bir YZ cevabına beş puan ver: doğru, anlaşılır, kaynaklı, güvenli, faydalı.",
+    "warning":"Cevabı beğenmek, cevabın doğru olduğu anlamına gelmez."
+  },
+  {
+    "term":"Yanlış Bilgi",
+    "icon":"⚠️",
+    "category":"Güvenlik ve Etik",
+    "level":1,
+    "definition":"Hatalı, eksik veya doğrulanmamış bilginin gerçekmiş gibi paylaşılmasıdır.",
+    "example":"Tarihi bir olayın yanlış yılını doğruymuş gibi yazmak.",
+    "activity":"Bir iddiayı başka iki kaynakta arayarak kontrol et.",
+    "warning":"Yanlış bilgi hızla yayılabilir; paylaşmadan önce dur ve kontrol et."
+  },
+  {
+    "term":"Dezenformasyon",
+    "icon":"🧨",
+    "category":"Güvenlik ve Etik",
+    "level":2,
+    "definition":"İnsanları yanıltmak amacıyla bilerek üretilen veya yayılan yanlış bilgidir.",
+    "example":"Sahte bir görselle bir olay hiç olmamış gibi ya da olmuş gibi gösterilebilir.",
+    "activity":"Bir içeriğin seni korkutmak veya kızdırmak için mi hazırlandığını tartış.",
+    "warning":"Dezenformasyon kararlarımızı ve toplumsal güveni etkileyebilir."
+  },
+  {
+    "term":"Sentetik Medya",
+    "icon":"🎭",
+    "category":"Üretken Yapay Zekâ",
+    "level":2,
+    "definition":"YZ ile üretilmiş veya değiştirilmiş görsel, ses, video ya da metin içerikleridir.",
+    "example":"Gerçek olmayan bir kişinin fotoğrafı veya YZ ile üretilmiş haber videosu.",
+    "activity":"Bir görselde ışık, eller, yazılar ve kaynak bilgisi tutarlı mı kontrol et.",
+    "warning":"Sentetik medya eğlenceli olabilir ama gerçekmiş gibi sunulursa yanıltıcıdır."
+  },
+  {
+    "term":"Ses Klonlama",
+    "icon":"🎙️",
+    "category":"Görsel ve Ses",
+    "level":2,
+    "definition":"Bir kişinin sesine benzer yapay ses üretme teknolojisidir.",
+    "example":"Bir karakterin sesini taklit eden YZ sistemi.",
+    "activity":"Bir ses kaydını duyduğunda kaynağı ve bağlamı doğrulama adımlarını yaz.",
+    "warning":"Bir sesin tanıdık gelmesi onun gerçek olduğu anlamına gelmez."
+  },
+  {
+    "term":"İçerik Kimliği",
+    "icon":"🪪",
+    "category":"Güvenlik ve Etik",
+    "level":2,
+    "definition":"Bir içeriğin kim tarafından, ne zaman ve hangi araçla üretildiğini anlamaya yarayan işaret veya kayıttır.",
+    "example":"Bir görselin YZ ile üretildiğini belirten açıklama veya etiket.",
+    "activity":"Bir görsel paylaşırken “YZ ile üretildi” notu eklemenin neden önemli olduğunu tartış.",
+    "warning":"İçeriğin kaynağı gizlenirse insanlar kolayca yanılabilir."
+  },
+  {
+    "term":"Su İşareti",
+    "icon":"💧",
+    "category":"Görsel ve Ses",
+    "level":2,
+    "definition":"Bir görsel, video veya belgede içeriğin kaynağını ya da üretim biçimini gösterebilen görünür veya gizli işarettir.",
+    "example":"Bir YZ görselinin köşesinde üretildiği aracı belirten küçük işaret.",
+    "activity":"Bir afişte kaynak ve üretim notunu nereye koyabileceğini tasarla.",
+    "warning":"Su işareti tek başına kesin kanıt değildir; kaynak kontrolü yine gerekir."
+  },
+  {
+    "term":"Model Kartı",
+    "icon":"🧾",
+    "category":"Güncel Kavramlar",
+    "level":3,
+    "definition":"Bir YZ modelinin ne amaçla geliştirildiğini, hangi verilerle test edildiğini, güçlü ve sınırlı yanlarını anlatan açıklama belgesidir.",
+    "example":"Bir modelin hangi dilleri iyi bildiğini ve hangi durumlarda yanılabileceğini açıklayan sayfa.",
+    "activity":"Hayali bir kitap öneri modeli için model kartı yaz: amaç, veri, güçlü yan, risk.",
+    "warning":"Model kartı okumak, sistemi bilinçli kullanmaya yardım eder."
+  },
+  {
+    "term":"Veri Kartı",
+    "icon":"🗃️",
+    "category":"Veri ve Öğrenme",
+    "level":3,
+    "definition":"Bir veri setinin nasıl toplandığını, içinde ne bulunduğunu, hangi sınırlara sahip olduğunu açıklayan belgedir.",
+    "example":"Meyve fotoğrafı veri setinde kaç elma, kaç armut ve hangi çekim koşulları olduğu bilgisi.",
+    "activity":"Kendi küçük veri listen için veri kartı hazırla: kaynak, sayı, çeşitlilik, eksik bilgi.",
+    "warning":"Veri kartı yoksa veri setinin güvenilirliğini anlamak zorlaşır."
+  },
+  {
+    "term":"Etki Değerlendirmesi",
+    "icon":"📋",
+    "category":"Güvenlik ve Etik",
+    "level":3,
+    "definition":"Bir YZ sisteminin insanlara, çocuklara, gizliliğe, adalete ve güvenliğe olası etkilerini kullanımdan önce incelemektir.",
+    "example":"Okulda kullanılacak YZ uygulamasının öğrenci verilerini nasıl etkilediğini değerlendirmek.",
+    "activity":"Bir YZ aracı için fayda, risk, kim etkilenir ve nasıl önlem alınır sorularını yanıtla.",
+    "warning":"Etkiler önceden düşünülmezse iyi niyetli araçlar bile zarar verebilir."
+  },
+  {
+    "term":"Risk Yönetimi",
+    "icon":"🛡️",
+    "category":"Güvenlik ve Etik",
+    "level":3,
+    "definition":"Bir YZ sistemindeki olası hataları, zararları ve kötüye kullanımları belirleyip azaltma sürecidir.",
+    "example":"Bir çocuk uygulamasında uygunsuz cevapları engellemek için güvenlik kontrolleri koymak.",
+    "activity":"Bir YZ aracı için üç risk ve üç koruma önlemi yaz.",
+    "warning":"Risk sıfırlanamaz; düzenli kontrol ve insan denetimi gerekir."
+  },
+  {
+    "term":"Kırmızı Takım Testi",
+    "icon":"🧪",
+    "category":"Güvenlik ve Etik",
+    "level":3,
+    "definition":"Bir sistemi zorlayarak açıklarını, hatalı cevaplarını veya kötüye kullanım yollarını bulmaya çalışan güvenlik testidir.",
+    "example":"Bir sohbet robotuna gizli bilgi vermesi için kandırıcı sorular sormayı deneyen test ekibi.",
+    "activity":"Güvenli bir örnek üzerinde “Bu sistem nerede hata yapabilir?” sorusunu tartış.",
+    "warning":"Bu testler kontrollü ve etik sınırlar içinde yapılmalıdır."
+  },
+  {
+    "term":"Sorumlu Yapay Zekâ",
+    "icon":"🌱",
+    "category":"Güvenlik ve Etik",
+    "level":2,
+    "definition":"YZ'nin insan haklarına, güvenliğe, adalete, gizliliğe, şeffaflığa ve çevreye dikkat edilerek geliştirilmesi ve kullanılmasıdır.",
+    "example":"Bir okul asistanının öğrencilerin özel bilgilerini koruyarak sadece öğrenmeye destek vermesi.",
+    "activity":"Sorumlu bir YZ aracı için beş kural yaz.",
+    "warning":"Teknoloji güçlü oldukça sorumluluk da artar."
+  },
+  {
+    "term":"Hesap Verebilirlik",
+    "icon":"⚖️",
+    "category":"Güvenlik ve Etik",
+    "level":2,
+    "definition":"Bir YZ sisteminin sonuçlarından kimin sorumlu olduğunu ve hata olduğunda nasıl düzeltileceğini açıkça belirleme ilkesidir.",
+    "example":"Yanlış kitap önerisi yapan sistemde düzeltme ve geri bildirim seçeneği olması.",
+    "activity":"Bir YZ aracı hata yaptığında kim bilgilendirilmeli, kim düzeltmeli listesi yap.",
+    "warning":"Sorumluluk yalnızca makineye bırakılamaz."
+  },
+  {
+    "term":"Çocuk Merkezli Tasarım",
+    "icon":"🎒",
+    "category":"Güvenlik ve Etik",
+    "level":2,
+    "definition":"Bir dijital aracın çocukların yaşına, gelişimine, güvenliğine, gizliliğine ve öğrenme ihtiyacına göre tasarlanmasıdır.",
+    "example":"Karmaşık reklamlar yerine açık yönergeler ve güvenli çıkış düğmesi olan çocuk uygulaması.",
+    "activity":"Bir çocuk uygulamasında bulunması gereken güvenli tasarım özelliklerini çiz.",
+    "warning":"Yetişkinler için uygun olan her araç çocuklar için uygun değildir."
+  },
+  {
+    "term":"Kapsayıcı Tasarım",
+    "icon":"🌈",
+    "category":"Güvenlik ve Etik",
+    "level":2,
+    "definition":"Farklı yaş, dil, beceri, engel durumu ve kültürlerden kullanıcıların da rahat kullanabileceği tasarım yaklaşımıdır.",
+    "example":"Metinleri sesli okuyabilen, yüksek kontrastlı ve sade dilli bir öğrenme aracı.",
+    "activity":"Bir ekranı görme, işitme veya okuma güçlüğü yaşayan biri için nasıl iyileştirirdin?",
+    "warning":"Kapsayıcılık sonradan süs değil, tasarımın temel parçasıdır."
+  },
+  {
+    "term":"Erişilebilirlik",
+    "icon":"♿",
+    "category":"Temel Kavramlar",
+    "level":1,
+    "definition":"Bir dijital içeriğin farklı ihtiyaçlara sahip herkes tarafından kullanılabilir olmasıdır.",
+    "example":"Butonların büyük olması, renklerin okunaklı olması ve görsellere açıklama yazılması.",
+    "activity":"Bu sayfada okunması zor olabilecek bir alan bul ve nasıl düzeltileceğini söyle.",
+    "warning":"Erişilebilir olmayan tasarım bazı kullanıcıları dışarıda bırakır."
+  },
+  {
+    "term":"Yapay Zekâ Refakatçisi",
+    "icon":"🧑‍🤝‍🧑",
+    "category":"Ajanlar ve Araçlar",
+    "level":2,
+    "definition":"Kullanıcıyla sohbet eden, öneri veren veya belirli bir konuda yol arkadaşı gibi davranan YZ uygulamasıdır.",
+    "example":"Kitap seçerken sana soru sorup seçenekleri daraltan dijital rehber.",
+    "activity":"Bir refakatçinin hangi konularda yardımcı olabileceğini ve nerede sınırlandırılması gerektiğini yaz.",
+    "warning":"Refakatçi gerçek arkadaş veya uzman değildir; önemli kararlar yetişkin ve uzman desteği ister."
+  },
+  {
+    "term":"Uyarlanabilir Öğrenme",
+    "icon":"🎯",
+    "category":"Güncel Kavramlar",
+    "level":2,
+    "definition":"Öğrenme içeriğinin öğrencinin seviyesine, hızına ve ihtiyaçlarına göre değişmesidir.",
+    "example":"Kolay soruları geçen öğrenciye daha zor; zorlanan öğrenciye ek açıklama verilmesi.",
+    "activity":"Bir konu için başlangıç, orta ve ileri seviye üç görev tasarla.",
+    "warning":"Kişiselleştirme yapılırken öğrenci verileri korunmalıdır."
+  },
+  {
+    "term":"Öğrenme Analitiği",
+    "icon":"📊",
+    "category":"Güncel Kavramlar",
+    "level":2,
+    "definition":"Öğrenme sürecindeki tıklama, doğru cevap, süre ve ilerleme gibi verilerden öğrenmeyi anlamaya çalışma yöntemidir.",
+    "example":"Hangi kavramlarda zorlanıldığını gösteren sınıf raporu.",
+    "activity":"Bir çalışma günlüğünde hangi konuyu, kaç dakika çalıştığını ve ne öğrendiğini yaz.",
+    "warning":"Öğrenme verileri hassastır; gereksiz paylaşılmamalıdır."
+  },
+  {
+    "term":"Dijital Vatandaşlık",
+    "icon":"🌐",
+    "category":"Güvenlik ve Etik",
+    "level":1,
+    "definition":"İnternette saygılı, güvenli, sorumlu ve bilinçli davranma becerisidir.",
+    "example":"Kaynak göstermek, kişisel bilgi paylaşmamak, başkalarına saygılı yorum yapmak.",
+    "activity":"Sınıf için 5 maddelik dijital vatandaşlık sözleşmesi hazırla.",
+    "warning":"Çevrim içi davranışların gerçek insanları etkiler."
+  },
+  {
+    "term":"Algoritmik Önyargı",
+    "icon":"⚖️",
+    "category":"Makine Öğrenmesi",
+    "level":2,
+    "definition":"Bir algoritmanın veriler, tasarım veya kullanım biçimi yüzünden bazı kişilere ya da gruplara haksız sonuç vermesidir.",
+    "example":"Sadece belli tür kitapları öneren sistemin farklı ilgi alanlarını görmezden gelmesi.",
+    "activity":"Bir öneri listesindeki çeşitliliği kontrol et: farklı tür, yazar ve konu var mı?",
+    "warning":"Önyargı bazen görünmezdir; düzenli test ve insan denetimi gerekir."
+  },
+  {
+    "term":"Geri Bildirim Döngüsü",
+    "icon":"🔄",
+    "category":"Makine Öğrenmesi",
+    "level":2,
+    "definition":"Bir sistemin kullanıcı tepkilerinden öğrenip sonraki önerilerini veya davranışını değiştirmesidir.",
+    "example":"Beğendiğin kitaplara göre sonraki önerilerin değişmesi.",
+    "activity":"Bir uygulamanın beğeni ve tıklamalarından seni nasıl tanıdığını düşün.",
+    "warning":"Yanlış geri bildirimler sistemi dar bir alana sıkıştırabilir."
+  },
+  {
+    "term":"İnsan Hakları Odaklı YZ",
+    "icon":"🕊️",
+    "category":"Güvenlik ve Etik",
+    "level":3,
+    "definition":"YZ sistemlerinin insan onuru, özgürlük, adalet, mahremiyet ve ayrımcılık yapmama ilkeleriyle uyumlu tasarlanmasıdır.",
+    "example":"Bir eğitim aracının öğrencileri etiketlerken haksız ayrım yapmaması.",
+    "activity":"Bir YZ aracı için hangi insan hakları etkilenebilir sorusunu tartış.",
+    "warning":"Teknik başarı, etik uygunluk anlamına gelmez."
+  },
+  {
+    "term":"Kavram Haritası",
+    "icon":"🗺️",
+    "category":"Temel Kavramlar",
+    "level":1,
+    "definition":"Bir konudaki kavramları ve aralarındaki ilişkileri görsel olarak gösteren öğrenme aracıdır.",
+    "example":"Veri → Model → Tahmin → Kontrol zincirini oklarla göstermek.",
+    "activity":"Bu sözlükten 8 kavram seçip aralarındaki bağlantıları çiz.",
+    "warning":"Harita basitleştirir; gerçek ilişkiler daha karmaşık olabilir."
+  }
+]);
+
+const categoryIcons = {
+  "Temel Kavramlar":"✦",
+  "Veri ve Öğrenme":"⚡",
+  "Makine Öğrenmesi":"⟁",
+  "Üretken Yapay Zekâ":"◈",
+  "Ajanlar ve Araçlar":"⚙",
+  "Görsel ve Ses":"◉",
+  "Güvenlik ve Etik":"⚖",
+  "Güncel Kavramlar":"◇"
+};
+
+const categories = [...new Set(TERMS.map(t => t.category))];
+let selectedMatch = null;
+let completedMatches = 0;
+
+/* ============= NORMALIZATION (Turkish-aware) ============= */
+function normalizeText(str){
+  return String(str || "")
+    .toLocaleLowerCase("tr-TR")
+    .replace(/ı/g,"i")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g,"")
+    .replace(/ğ/g,"g")
+    .replace(/ü/g,"u")
+    .replace(/ş/g,"s")
+    .replace(/ö/g,"o")
+    .replace(/ç/g,"c")
+    .replace(/â/g,"a")
+    .replace(/î/g,"i")
+    .replace(/û/g,"u")
+    .replace(/[^a-z0-9\s]/g," ")
+    .replace(/\s+/g," ")
+    .trim();
+}
+
+const SEARCH_STOPWORDS = new Set([
+  "ve","veya","ile","icin","bir","bu","su","ne","nedir","nasil",
+  "mi","mu","mu","mi","da","de","ki","olarak","hakkinda","kavram","konu"
+]);
+
+const SEARCH_ALIASES = {
+  "Yapay Zekâ":"yapay zeka ai artificial intelligence yz zeka",
+  "YZ":"yapay zeka ai artificial intelligence",
+  "Üretken Yapay Zekâ":"uretken yapay zeka generative ai genai gorsel metin uretim",
+  "Büyük Dil Modeli":"llm large language model chatgpt sohbet asistani metin modeli",
+  "LLM":"buyuk dil modeli large language model sohbet asistani metin modeli",
+  "Küçük Dil Modeli":"small language model slm kucuk model",
+  "Prompt":"komut istem yonerge talimat prompt yazma",
+  "Prompt Mühendisliği":"prompt engineering iyi komut yonerge talimat",
+  "RAG":"retrieval augmented generation kaynakli cevap belge arama grounding",
+  "Grounding":"kaynakli cevap dayanak belge dogrulama rag",
+  "Embedding":"vektor anlam haritasi sayisal temsil semantik",
+  "Vektör Veri Tabanı":"vector database vektor database embedding semantik arama",
+  "Semantik Arama":"anlamsal arama meaning search benzer anlam",
+  "Ajan":"agent ai agent gorev yapan planlayan yapay zeka",
+  "Function Calling":"fonksiyon cagirma tool calling arac kullanimi",
+  "MCP":"model context protocol arac baglantisi protokol",
+  "Deepfake":"sahte video sahte ses yapay gorsel manipulasyon",
+  "Halüsinasyon":"hallucination uydurma yanlis bilgi yanlis cevap"
+};
+
+Object.assign(SEARCH_ALIASES, {
+  "Yapay Zekâ Okuryazarlığı":"ai literacy yapay zeka okuryazarligi yzil literacy bilincli kullanim",
+  "Medya Okuryazarlığı":"media literacy haber video gorsel kaynak elestirel",
+  "Kaynak Kontrolü":"dogrulama verification fact check kaynakca guvenilir kaynak",
+  "Güvenilir Kaynak":"otorite kurum kaynak resmi kurum unicef unesco oecd",
+  "Atıf":"citation referans kaynak gosterme bibliyografya",
+  "Çocuk Hakları":"children rights cocuk haklari unicef child rights",
+  "Rıza":"izin consent veli onay mahremiyet gizlilik",
+  "Veri Minimizasyonu":"data minimization az veri gizlilik kisisel veri",
+  "Çıktı Değerlendirme":"cevap kontrolu output evaluation degerlendirme kalite kontrol",
+  "Yanlış Bilgi":"misinformation false information hata bilgi",
+  "Dezenformasyon":"disinformation manipulative false bilgi kasitli yanlis",
+  "Sentetik Medya":"synthetic media ai generated image video audio",
+  "Ses Klonlama":"voice cloning sahte ses deepfake audio",
+  "İçerik Kimliği":"content credentials provenance kaynak kimligi icerik kaynagi",
+  "Su İşareti":"watermark filigran icerik etiketi",
+  "Model Kartı":"model card model documentation sinirlar riskler",
+  "Veri Kartı":"data card dataset documentation datasheet",
+  "Etki Değerlendirmesi":"impact assessment child rights impact risk değerlendirmesi",
+  "Risk Yönetimi":"risk management ai rmf guvenlik zarar azaltma",
+  "Kırmızı Takım Testi":"red team red teaming güvenlik testi acik testi",
+  "Sorumlu Yapay Zekâ":"responsible ai trustworthy ai etik guvenilir",
+  "Hesap Verebilirlik":"accountability sorumluluk denetim duzeltme",
+  "Çocuk Merkezli Tasarım":"child centered design cocuk dostu tasarim",
+  "Kapsayıcı Tasarım":"inclusive design kapsayici tasarim erisilebilirlik",
+  "Erişilebilirlik":"accessibility engelli uyumlu okunabilir",
+  "Yapay Zekâ Refakatçisi":"ai companion chatbot arkadas refakatci",
+  "Uyarlanabilir Öğrenme":"adaptive learning kisisellestirilmis ogrenme",
+  "Öğrenme Analitiği":"learning analytics ogrenme verisi rapor",
+  "Dijital Vatandaşlık":"digital citizenship guvenli internet etik davranis",
+  "Algoritmik Önyargı":"algorithmic bias bias yanlilik haksizlik",
+  "Geri Bildirim Döngüsü":"feedback loop user feedback öneri sistemi",
+  "İnsan Hakları Odaklı YZ":"human rights based ai insan haklari etik",
+  "Kavram Haritası":"concept map zihin haritasi baglanti kavram"
+});
+
+function getSearchableText(t){
+  const aliases = SEARCH_ALIASES[t.term] || "";
+  return normalizeText([
+    t.term, t.icon, t.category, levelLabel(t.level),
+    t.definition, t.example, t.activity, t.warning, aliases
+  ].join(" "));
+}
+
+function levenshteinDistance(a,b){
+  if(Math.abs(a.length - b.length) > 1) return 99;
+  const dp = Array.from({length:a.length+1},(_,i)=>[i]);
+  for(let j=1;j<=b.length;j++) dp[0][j]=j;
+  for(let i=1;i<=a.length;i++){
+    for(let j=1;j<=b.length;j++){
+      dp[i][j] = Math.min(
+        dp[i-1][j] + 1,
+        dp[i][j-1] + 1,
+        dp[i-1][j-1] + (a[i-1] === b[j-1] ? 0 : 1)
+      );
+    }
+  }
+  return dp[a.length][b.length];
+}
+
+function tokenMatchesText(token, text){
+  if(!token) return true;
+  if(text.includes(token)) return true;
+  if(token.length < 4) return false;
+  return text.split(" ").some(word =>
+    word.startsWith(token) ||
+    token.startsWith(word) ||
+    (word.length >= 5 && levenshteinDistance(token, word) <= 1)
+  );
+}
+
+function searchScore(t, query, tokens){
+  if(!query) return 0;
+  const termText = normalizeText(t.term);
+  const categoryText = normalizeText(t.category);
+  const definitionText = normalizeText(t.definition);
+  const allText = getSearchableText(t);
+  let score = 0;
+  if(termText === query) score += 220;
+  if(termText.startsWith(query)) score += 150;
+  if(termText.includes(query)) score += 120;
+  if(categoryText.includes(query)) score += 70;
+  if(definitionText.includes(query)) score += 45;
+  if(allText.includes(query)) score += 35;
+  tokens.forEach(tok => {
+    if(termText === tok) score += 80;
+    else if(termText.startsWith(tok)) score += 60;
+    else if(termText.includes(tok)) score += 45;
+    else if(categoryText.includes(tok)) score += 25;
+    else if(allText.includes(tok)) score += 14;
+  });
+  return score;
+}
+
+function getSearchTokens(raw){
+  return normalizeText(raw).split(" ")
+    .map(x => x.trim())
+    .filter(x => x && !SEARCH_STOPWORDS.has(x));
+}
+
+/* ============= STATE ============= */
+function getLearned(){
+  try{return JSON.parse(localStorage.getItem("gokboru_ai_glossary_learned") || "[]")}
+  catch(e){return []}
+}
+function setLearned(list){
+  localStorage.setItem("gokboru_ai_glossary_learned", JSON.stringify(list));
+}
+function levelLabel(level){
+  if(level === 1) return "Başlangıç";
+  if(level === 2) return "Orta";
+  return "İleri";
+}
+
+/* ============= INIT ============= */
+function init(){
+  document.getElementById("statTerms").textContent = TERMS.length;
+
+  const select = document.getElementById("categorySelect");
+  categories.forEach(cat => {
+    const opt = document.createElement("option");
+    opt.value = cat;
+    opt.textContent = cat;
+    select.appendChild(opt);
+  });
+
+  const chips = document.getElementById("categoryChips");
+  chips.innerHTML = "";
+  const allChip = document.createElement("button");
+  allChip.className = "chip active";
+  allChip.innerHTML = "<span>✦</span> Tümü";
+  allChip.onclick = () => setCategory("all");
+  chips.appendChild(allChip);
+
+  categories.forEach(cat => {
+    const chip = document.createElement("button");
+    chip.className = "chip";
+    chip.innerHTML = `<span>${categoryIcons[cat] || "•"}</span> ${cat}`;
+    chip.onclick = () => setCategory(cat);
+    chips.appendChild(chip);
+  });
+
+  installSearchEnhancement();
+  renderTerms();
+  updateProgress();
+  buildMatchGame();
+  makeEmbers();
+  attachCardMouse();
+}
+
+function makeEmbers(){
+  const box = document.getElementById("emberField");
+  for(let i=0;i<22;i++){
+    const e = document.createElement("div");
+    e.className = "ember";
+    e.style.left = Math.random() * 100 + "%";
+    e.style.bottom = Math.random() * 30 + "%";
+    e.style.animationDuration = 8 + Math.random() * 12 + "s";
+    e.style.animationDelay = Math.random() * 8 + "s";
+    e.style.transform = `scale(${0.6 + Math.random() * 0.8})`;
+    box.appendChild(e);
+  }
+}
+
+function attachCardMouse(){
+  document.addEventListener("mousemove", e => {
+    document.querySelectorAll(".term-card").forEach(card => {
+      const rect = card.getBoundingClientRect();
+      if(e.clientX >= rect.left && e.clientX <= rect.right &&
+         e.clientY >= rect.top && e.clientY <= rect.bottom){
+        card.style.setProperty("--mx", ((e.clientX - rect.left) / rect.width * 100) + "%");
+        card.style.setProperty("--my", ((e.clientY - rect.top) / rect.height * 100) + "%");
+      }
+    });
+  });
+}
+
+function setCategory(cat){
+  document.getElementById("categorySelect").value = cat;
+  [...document.querySelectorAll(".chip")].forEach(ch => ch.classList.remove("active"));
+  const index = cat === "all" ? 0 : categories.indexOf(cat) + 1;
+  if(document.querySelectorAll(".chip")[index])
+    document.querySelectorAll(".chip")[index].classList.add("active");
+  renderTerms();
+}
+
+/* ============= FILTER + RENDER ============= */
+function filteredTerms(){
+  const searchEl = document.getElementById("searchInput");
+  const rawQuery = searchEl ? searchEl.value : "";
+  const q = normalizeText(rawQuery);
+  const tokens = getSearchTokens(rawQuery);
+  const category = document.getElementById("categorySelect")?.value || "all";
+  const level = document.getElementById("levelSelect")?.value || "all";
+  const sort = document.getElementById("sortSelect")?.value || "az";
+
+  let list = TERMS
+    .map(t => ({
+      ...t,
+      _searchText: getSearchableText(t),
+      _score: searchScore(t, q, tokens)
+    }))
+    .filter(t => {
+      const queryOk = !q || tokens.every(tok => tokenMatchesText(tok, t._searchText)) || t._searchText.includes(q);
+      const categoryOk = category === "all" || t.category === category;
+      const levelOk = level === "all" || String(t.level) === level;
+      return queryOk && categoryOk && levelOk;
+    });
+
+  list.sort((a,b) => {
+    if(q && b._score !== a._score) return b._score - a._score;
+    if(sort === "za") return b.term.localeCompare(a.term, "tr");
+    if(sort === "level") return a.level - b.level || a.term.localeCompare(b.term, "tr");
+    if(sort === "category") return a.category.localeCompare(b.category, "tr") || a.term.localeCompare(b.term, "tr");
+    return a.term.localeCompare(b.term, "tr");
+  });
+
+  return list;
+}
+
+function renderTerms(){
+  const list = filteredTerms();
+  const cards = document.getElementById("cards");
+  const learned = getLearned();
+  const q = normalizeText(document.getElementById("searchInput")?.value || "");
+
+  document.getElementById("resultCount").textContent = `${list.length} kavram`;
+  syncSearchUI();
+
+  if(!list.length){
+    cards.innerHTML = `
+      <div class="empty">
+        <div class="empty-icon">◇</div>
+        <p>Aradığın kavram bulunamadı. "zeka", "prompt", "ajan", "rag" gibi farklı bir kelime dene.</p>
+      </div>`;
+    return;
+  }
+
+  cards.innerHTML = list.map((t, i) => {
+    const isDone = learned.includes(t.term);
+    const hitClass = q ? " search-hit" : "";
+    const num = String(i+1).padStart(2,"0");
+    return `
+      <article class="term-card${hitClass}">
+        <div class="tc-num">${num}</div>
+        <div class="tc-header">
+          <div class="tc-icon">${t.icon}</div>
+          <div class="tc-meta">
+            <div class="tc-cat">${categoryIcons[t.category] || "◆"} ${t.category}</div>
+            <h3 class="tc-title">${t.term}</h3>
+          </div>
+          <div class="tc-level l${t.level}">${levelLabel(t.level)}</div>
+        </div>
+
+        <div class="tc-def">${t.definition}</div>
+
+        <div class="tc-block ex">
+          <span class="tc-tag">⊹ Örnek</span>
+          <div class="tc-text">${t.example}</div>
+        </div>
+        <div class="tc-block act">
+          <span class="tc-tag">⊹ Etkinlik</span>
+          <div class="tc-text">${t.activity}</div>
+        </div>
+        <div class="tc-block warn">
+          <span class="tc-tag">⊹ Dikkat</span>
+          <div class="tc-text">${t.warning}</div>
+        </div>
+
+        <div class="tc-actions">
+          <button class="mini" onclick="openTerm('${escapeKey(t.term)}')">◇ Detay</button>
+          <button class="mini" onclick="speakTerm('${escapeKey(t.term)}')">🐺 Anlatsın</button>
+          <button class="mini" onclick="printTerm('${escapeKey(t.term)}')">PDF</button>
+          <button class="mini ${isDone ? "done" : ""}" onclick="toggleLearned('${escapeKey(t.term)}')">${isDone ? "✓ Öğrenildi" : "+ Öğrendim"}</button>
+        </div>
+      </article>
+    `;
+  }).join("");
+}
+
+function escapeKey(str){
+  return String(str).replaceAll("\\","\\\\").replaceAll("'","\\'");
+}
+function getTerm(term){
+  return TERMS.find(t => t.term === term);
+}
+
+function speakTerm(term){
+  const t = getTerm(term);
+  if(!t) return;
+  document.getElementById("bilgeSpeech").innerHTML =
+    `<strong>${t.icon} ${t.term}.</strong> ${t.definition} <em>Örnek:</em> ${t.example}`;
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+function openTerm(term){
+  const t = getTerm(term);
+  if(!t) return;
+  document.getElementById("modalTitle").textContent = `${t.icon} ${t.term}`;
+  document.getElementById("modalDefinition").innerHTML = `<b>Gökbörü:</b> ${t.definition}`;
+  document.getElementById("modalExample").textContent = t.example;
+  document.getElementById("modalActivity").textContent = t.activity;
+  document.getElementById("modalWarning").textContent = t.warning;
+  document.getElementById("modalMeta").textContent = `${t.category} / ${levelLabel(t.level)}`;
+  document.getElementById("modalBack").classList.add("show");
+}
+
+function closeModal(e){
+  if(e.target.id === "modalBack"){
+    document.getElementById("modalBack").classList.remove("show");
+  }
+}
+
+function toggleLearned(term){
+  let learned = getLearned();
+  if(learned.includes(term)){
+    learned = learned.filter(x => x !== term);
+  }else{
+    learned.push(term);
+  }
+  setLearned(learned);
+  updateProgress();
+  renderTerms();
+}
+
+function updateProgress(){
+  const learned = getLearned();
+  const pct = Math.round((learned.length / TERMS.length) * 100);
+  document.getElementById("statDone").textContent = learned.length;
+  document.getElementById("progressBar").style.width = `${pct}%`;
+  document.getElementById("progressText").textContent =
+    learned.length
+      ? `${learned.length}/${TERMS.length} kavram işaretlendi · İlerleme %${pct}`
+      : "Henüz kavram işaretlenmedi.";
+}
+
+function shuffle(arr){
+  return [...arr].sort(() => Math.random() - 0.5);
+}
+
+function randomTerm(){
+  const t = TERMS[Math.floor(Math.random() * TERMS.length)];
+  speakTerm(t.term);
+  openTerm(t.term);
+}
+
+function safeHTML(str){
+  return String(str || "")
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+}
+
+function ensureTermPrintSheet(){
+  let sheet = document.getElementById("termPrintSheet");
+  if(!sheet){
+    sheet = document.createElement("section");
+    sheet.id = "termPrintSheet";
+    sheet.className = "term-print-sheet";
+    sheet.setAttribute("aria-hidden", "true");
+    document.body.appendChild(sheet);
+  }
+  return sheet;
+}
+
+function buildTermPrintHTML(t){
+  return `
+    <article class="term-print-card">
+      <div class="term-print-brand">
+        <span>AI'HAN ACADEMY · Gökbörü'nün Yapay Zekâ Sözlüğü</span>
+        <span>Çocuklar için kavram kartı</span>
+      </div>
+
+      <div class="term-print-title">
+        <div class="term-print-icon">${safeHTML(t.icon)}</div>
+        <div>
+          <h1>${safeHTML(t.term)}</h1>
+          <div class="term-print-meta">${safeHTML(t.category)} · ${safeHTML(levelLabel(t.level))}</div>
+        </div>
+      </div>
+
+      <div class="term-print-definition">${safeHTML(t.definition)}</div>
+
+      <div class="term-print-grid">
+        <div class="term-print-box"><b>Somut örnek</b><span>${safeHTML(t.example)}</span></div>
+        <div class="term-print-box"><b>Mini etkinlik</b><span>${safeHTML(t.activity)}</span></div>
+        <div class="term-print-box"><b>Dikkat notu</b><span>${safeHTML(t.warning)}</span></div>
+      </div>
+
+      <div class="term-print-footer">
+        <span><strong>Kaynak yaklaşımı:</strong> Çocuk dostu yapay zekâ okuryazarlığı, güvenli kullanım ve eleştirel değerlendirme ilkeleri.</span>
+        <span>© 2026 AI'Han Library Games · Ayhan Bozkurt</span>
+      </div>
+    </article>
+  `;
+}
+
+function printTerm(term){
+  const t = getTerm(term);
+  if(!t) return;
+
+  const sheet = ensureTermPrintSheet();
+  sheet.innerHTML = buildTermPrintHTML(t);
+  document.body.classList.add("print-single-term");
+
+  const cleanup = () => {
+    document.body.classList.remove("print-single-term");
+    sheet.innerHTML = "";
+    window.removeEventListener("afterprint", cleanup);
+  };
+
+  window.addEventListener("afterprint", cleanup, {once:true});
+
+  requestAnimationFrame(() => {
+    setTimeout(() => {
+      try{
+        window.print();
+      }finally{
+        setTimeout(cleanup, 800);
+      }
+    }, 80);
+  });
+}
+
+/* ============= MATCH GAME ============= */
+function getMatchSource(){
+  let source = [];
+  try{source = filteredTerms()}catch(e){source = TERMS}
+  if(!Array.isArray(source) || source.length < 4) source = TERMS;
+  return source.filter(t => t && t.term && t.definition);
+}
+
+function buildMatchGame(scrollToGame = false){
+  const board = document.getElementById("matchBoard");
+  const feedback = document.getElementById("matchFeedback");
+  const score = document.getElementById("matchScore");
+  if(!board) return;
+
+  const picked = shuffle(getMatchSource()).slice(0,4);
+  completedMatches = 0;
+  selectedMatch = null;
+
+  if(picked.length < 2){
+    board.innerHTML = `<div class="empty"><p>Eşleştirme için yeterli kavram yok.</p></div>`;
+    if(score) score.textContent = "0/0 eşleşme";
+    if(feedback) feedback.textContent = "";
+    return;
+  }
+
+  const terms = shuffle(picked.map((p, index) => ({
+    key:`m-${index}-${normalizeText(p.term)}`,
+    term:p.term,
+    icon:p.icon || "📌",
+    label:p.term
+  })));
+
+  const defs = shuffle(picked.map((p, index) => ({
+    key:`m-${index}-${normalizeText(p.term)}`,
+    term:p.term,
+    label:p.definition
+  })));
+
+  board.innerHTML = `
+    <div class="match-col">
+      <div class="match-col-title"><span>◆ Kavram</span><span>${picked.length} kart</span></div>
+      ${terms.map(item => `
+        <button type="button" class="match-item" data-key="${safeHTML(item.key)}" data-side="term">
+          ${safeHTML(item.icon)} ${safeHTML(item.label)}
+        </button>
+      `).join("")}
+    </div>
+    <div class="match-col">
+      <div class="match-col-title"><span>◇ Açıklama</span><span>Eşi bul</span></div>
+      ${defs.map(item => `
+        <button type="button" class="match-item" data-key="${safeHTML(item.key)}" data-side="definition">
+          ${safeHTML(item.label)}
+        </button>
+      `).join("")}
+    </div>
+  `;
+
+  board.querySelectorAll(".match-item").forEach(btn => {
+    btn.addEventListener("click", () => selectMatch(btn));
+  });
+
+  if(score) score.textContent = `0/${picked.length} doğru eşleşme`;
+  if(feedback){
+    feedback.style.color = "var(--rune)";
+    feedback.textContent = "Bir kavram ve bir açıklama seç.";
+  }
+  if(scrollToGame){
+    document.getElementById("matchGameBox").scrollIntoView({behavior:"smooth", block:"center"});
+  }
+}
+
+function resetMatchSelection(){
+  const board = document.getElementById("matchBoard");
+  if(!board) return;
+  selectedMatch = null;
+  board.querySelectorAll(".match-item.selected,.match-item.wrong").forEach(el => {
+    el.classList.remove("selected","wrong");
+  });
+  const feedback = document.getElementById("matchFeedback");
+  if(feedback){
+    feedback.style.color = "var(--rune)";
+    feedback.textContent = "Seçim temizlendi.";
+  }
+}
+
+function selectMatch(el){
+  if(!el || el.classList.contains("matched")) return;
+  const board = document.getElementById("matchBoard");
+  const feedback = document.getElementById("matchFeedback");
+  const score = document.getElementById("matchScore");
+  if(!board) return;
+
+  el.classList.remove("wrong");
+
+  if(!selectedMatch){
+    selectedMatch = el;
+    el.classList.add("selected");
+    if(feedback){
+      feedback.style.color = "var(--rune)";
+      feedback.textContent = el.dataset.side === "term"
+        ? "Şimdi sağdan açıklamayı seç."
+        : "Şimdi soldan kavramı seç.";
+    }
+    return;
+  }
+
+  if(selectedMatch === el){
+    el.classList.remove("selected");
+    selectedMatch = null;
+    if(feedback) feedback.textContent = "Seçim kaldırıldı.";
+    return;
+  }
+
+  const first = selectedMatch;
+  const second = el;
+  const sameSide = first.dataset.side === second.dataset.side;
+
+  if(sameSide){
+    first.classList.remove("selected");
+    selectedMatch = second;
+    second.classList.add("selected");
+    if(feedback) feedback.textContent = "Karşı sütundan bir kart seç.";
+    return;
+  }
+
+  const correct = first.dataset.key === second.dataset.key;
+
+  if(correct){
+    first.classList.remove("selected","wrong");
+    second.classList.remove("selected","wrong");
+    first.classList.add("matched");
+    second.classList.add("matched");
+    first.disabled = true;
+    second.disabled = true;
+    completedMatches++;
+
+    const totalPairs = board.querySelectorAll('[data-side="term"]').length;
+    if(score) score.textContent = `${completedMatches}/${totalPairs} doğru eşleşme`;
+    if(feedback){
+      feedback.style.color = "var(--jade)";
+      feedback.textContent = `✓ Doğru eşleşme! ${completedMatches}/${totalPairs}`;
+    }
+
+    if(completedMatches === totalPairs){
+      if(feedback){
+        feedback.style.color = "var(--gold-bright)";
+        feedback.textContent = "★ Tüm eşleşmeler tamam. Gökbörü rozeti kazandın.";
+      }
+    }
+  }else{
+    first.classList.add("wrong");
+    second.classList.add("wrong");
+    if(feedback){
+      feedback.style.color = "var(--ember)";
+      feedback.textContent = "✕ Eşleşmedi. Tekrar dene.";
+    }
+    setTimeout(() => {
+      first.classList.remove("selected","wrong");
+      second.classList.remove("selected","wrong");
+    }, 620);
+  }
+
+  selectedMatch = null;
+}
+
+/* ============= LAB ============= */
+function analyzePrompt(){
+  const text = document.getElementById("promptBox").value.trim();
+  const out = document.getElementById("promptOutput");
+  if(!text){out.textContent = "Önce bir prompt yazmalısın."; return}
+
+  let tips = [];
+  if(text.length < 40) tips.push("Biraz daha ayrıntı ekle.");
+  if(!/[0-9]/.test(text)) tips.push("Yaş, uzunluk veya madde sayısı gibi ölçü ekleyebilirsin.");
+  if(!/çocuk|yaş|öğrenci|sade|kısa|örnek/i.test(text)) tips.push("Hedef kitleyi veya anlatım düzeyini belirt.");
+  if(!/örnek|somut|adım|tablo|madde/i.test(text)) tips.push("Somut örnek, adım veya tablo isteyebilirsin.");
+  if(!/kontrol|kaynak|doğru|güven/i.test(text)) tips.push("Doğruluk ve kaynak kontrolü isteyebilirsin.");
+
+  if(!tips.length){
+    out.innerHTML = "<b>Gökbörü:</b> Güzel prompt! Açık, amaçlı ve anlaşılır görünüyor. ✓";
+  }else{
+    out.innerHTML = "<b>Gökbörü'nün notu:</b><br>" + tips.map(t => "› " + t).join("<br>");
+  }
+}
+
+function dataDetective(){
+  const scenarios = [
+    {data:"10 elma fotoğrafı, 0 armut fotoğrafı, 0 muz fotoğrafı",
+     issue:"Model sadece elmayı öğrenir; diğer meyvelerde zorlanır.",
+     fix:"Her meyveden dengeli örnek ekle."},
+    {data:"Kedi fotoğraflarının yarısı yanlışlıkla \"köpek\" diye etiketlenmiş",
+     issue:"Yanlış etiket modeli şaşırtır.",
+     fix:"Etiketleri kontrol edip düzelt."},
+    {data:"Tüm fotoğraflar gündüz çekilmiş, gece örneği yok",
+     issue:"Model gece görüntülerinde zorlanabilir.",
+     fix:"Farklı ışık koşullarından örnek ekle."},
+    {data:"Sadece tek bir kişinin sesi kaydedilmiş",
+     issue:"Sistem farklı sesleri anlamakta zorlanabilir.",
+     fix:"Farklı yaş, hız ve tonlarda ses örnekleri ekle."}
+  ];
+  const s = scenarios[Math.floor(Math.random() * scenarios.length)];
+  document.getElementById("dataOutput").innerHTML =
+    `<b>Veri seti:</b> ${s.data}<br><b>Sorun:</b> ${s.issue}<br><b>Çözüm:</b> ${s.fix}`;
+}
+
+function safetyCheck(){
+  document.getElementById("safetyOutput").innerHTML =
+    `<b>Güvenli Kullanım Kontrol Listesi</b><br>
+     ✓ Kişisel bilgi paylaşma.<br>
+     ✓ Cevabı en az iki güvenilir kaynakla kontrol et.<br>
+     ✓ Görsel/video gerçek mi diye dikkatlice incele.<br>
+     ✓ Yaşına uygun olmayan içerikte bir yetişkinden yardım al.<br>
+     ✓ Son kararın insanda olduğunu unutma.`;
+}
+
+/* ============= SEARCH UI ============= */
+function syncSearchUI(){
+  const search = document.getElementById("searchInput");
+  const clearBtn = document.getElementById("searchClearBtn");
+  if(!search || !clearBtn) return;
+  clearBtn.classList.toggle("show", Boolean(search.value.trim()));
+}
+
+function clearSearchFilters(){
+  document.getElementById("searchInput").value = "";
+  document.getElementById("categorySelect").value = "all";
+  document.getElementById("levelSelect").value = "all";
+  document.getElementById("sortSelect").value = "az";
+  setCategory("all");
+  syncSearchUI();
+  document.getElementById("searchInput").focus();
+}
+
+function installSearchEnhancement(){
+  const search = document.getElementById("searchInput");
+  if(!search || search.dataset.enhanced === "1") return;
+  search.dataset.enhanced = "1";
+  search.setAttribute("autocomplete","off");
+  search.setAttribute("spellcheck","false");
+
+  const field = search.closest(".field");
+  if(field){
+    field.classList.add("search-enhanced");
+    if(!document.getElementById("searchClearBtn")){
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.id = "searchClearBtn";
+      btn.className = "search-clear-btn";
+      btn.textContent = "×";
+      btn.title = "Aramayı temizle";
+      btn.onclick = clearSearchFilters;
+      field.appendChild(btn);
+    }
+  }
+
+  const discovery = document.querySelector(".discovery");
+  if(discovery && !document.getElementById("searchHint")){
+    const hint = document.createElement("div");
+    hint.id = "searchHint";
+    hint.className = "search-hint";
+    hint.textContent = 'Türkçe karakter ve şapka farkını yakalar — "zeka" → "Yapay Zekâ", "uretken" → "Üretken Yapay Zekâ"';
+    discovery.appendChild(hint);
+  }
+
+  let frame = null;
+  const safeRender = () => {
+    cancelAnimationFrame(frame);
+    frame = requestAnimationFrame(renderTerms);
+  };
+  search.addEventListener("input", safeRender);
+  search.addEventListener("search", safeRender);
+  search.addEventListener("keyup", e => {
+    if(e.key === "Escape") clearSearchFilters();
+  });
+  ["categorySelect","levelSelect","sortSelect"].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.addEventListener("change", renderTerms);
+  });
+  syncSearchUI();
+}
+
+
+function focusLearningPath(category, query){
+  const cat = document.getElementById("categorySelect");
+  const search = document.getElementById("searchInput");
+  const level = document.getElementById("levelSelect");
+  const sort = document.getElementById("sortSelect");
+
+  if(cat) cat.value = category || "all";
+  if(search) search.value = query || "";
+  if(level) level.value = "all";
+  if(sort) sort.value = "az";
+
+  renderTerms();
+  updateChipState(category || "all");
+  document.getElementById("dictionary")?.scrollIntoView({behavior:"smooth", block:"start"});
+
+  const speech = document.getElementById("bilgeSpeech");
+  if(speech){
+    speech.textContent = `Bu rota açıldı: ${category}. Arama kutusunda ilgili kavramlar hazır. Kartları sırayla inceleyip örnek ve dikkat notlarını oku.`;
+  }
+}
+
+document.addEventListener("keydown", e => {
+  if(e.key === "Escape"){
+    document.getElementById("modalBack").classList.remove("show");
+  }
+});
+
+init();
+</script>
+</body>
+</html>
